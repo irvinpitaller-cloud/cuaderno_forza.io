@@ -1,0 +1,2227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#1e5fa8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>FORZA Taller</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   FORZA TALLER — TEMA CUADERNO TÉCNICO (persistente)
+   ========================================================= */
+:root{
+  --paper:#fafaf6;
+  --paper-grid:#e8ecef;
+  --paper-grid-strong:#d4dae0;
+  --paper-margin:#f0d5d5;
+  --paper-card:#ffffff;
+
+  --ink:#1a2332;
+  --ink-soft:#4a5568;
+  --ink-muted:#8892a0;
+  --ink-line:#cbd5e0;
+  --ink-line-strong:#2d3748;
+
+  --blue:#1e5fa8;
+  --blue-dark:#164a82;
+  --blue-light:#dbeafe;
+  --blue-accent:#3b82f6;
+
+  --ok:#15803d;   --ok-bg:#dcfce7;
+  --warn:#a16207; --warn-bg:#fef3c7;
+  --err:#b91c1c;  --err-bg:#fee2e2;
+  --info:#1e40af; --info-bg:#dbeafe;
+
+  --font-sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --font-mono:'JetBrains Mono','SF Mono',Monaco,Consolas,monospace;
+  --font-hand:'Caveat','Bradley Hand',cursive;
+
+  --safe-b:env(safe-area-inset-bottom,0px);
+  --safe-t:env(safe-area-inset-top,0px);
+}
+*{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent;}
+html,body{height:100%; overscroll-behavior:none;}
+
+body{
+  font-family:var(--font-sans);
+  background:var(--paper);
+  color:var(--ink);
+  font-size:15px; line-height:1.45;
+  padding-bottom:calc(72px + var(--safe-b));
+  position:relative;
+  min-height:100vh;
+}
+
+/* ---------- FONDO CUADERNO (grid + margen) ---------- */
+body::before{
+  content:"";
+  position:fixed; inset:0;
+  background-image:
+    linear-gradient(var(--paper-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--paper-grid) 1px, transparent 1px),
+    linear-gradient(var(--paper-grid-strong) 1px, transparent 1px),
+    linear-gradient(90deg, var(--paper-grid-strong) 1px, transparent 1px);
+  background-size:20px 20px, 20px 20px, 100px 100px, 100px 100px;
+  pointer-events:none;
+  z-index:0;
+  opacity:.8;
+}
+/* Margen rojo tipo cuaderno (solo en desktop/tablet) */
+@media(min-width:600px){
+  body::after{
+    content:"";
+    position:fixed; top:0; bottom:0; left:80px;
+    width:2px;
+    background:var(--paper-margin);
+    pointer-events:none;
+    z-index:0;
+  }
+}
+header, main, nav.bottom, .modal-bg{position:relative; z-index:1;}
+
+/* ---------- HEADER ---------- */
+header{
+  position:sticky; top:0; z-index:50;
+  background:var(--blue);
+  color:#fff;
+  padding:12px 14px; padding-top:calc(12px + var(--safe-t));
+  display:flex; align-items:center; gap:12px;
+  box-shadow:0 2px 8px rgba(30,95,168,.25);
+}
+header::after{
+  content:"";
+  position:absolute; left:0; right:0; bottom:0; height:3px;
+  background:repeating-linear-gradient(90deg,
+    var(--blue-accent) 0 8px,
+    transparent 8px 16px);
+  opacity:.6;
+}
+header .logo-box{
+  width:44px; height:44px;
+  background:#fff;
+  border:2px solid rgba(255,255,255,.4);
+  border-radius:8px;
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden; flex-shrink:0;
+  box-shadow:0 2px 4px rgba(0,0,0,.1);
+}
+header .logo-box img{width:100%; height:100%; object-fit:contain; padding:3px;}
+header .logo-box .fallback{
+  font-family:var(--font-mono);
+  font-size:20px; color:var(--blue); font-weight:800;
+}
+header .titles{flex:1; min-width:0;}
+header h1{
+  font-family:var(--font-mono);
+  font-size:14px; font-weight:700; letter-spacing:.5px;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  text-transform:uppercase;
+  color:#fff;
+}
+header .subtitle{
+  font-family:var(--font-mono);
+  font-size:9px; color:rgba(255,255,255,.75);
+  text-transform:uppercase; letter-spacing:1.5px;
+  margin-top:2px;
+}
+header .icon-btn{
+  background:rgba(255,255,255,.15);
+  border:1px solid rgba(255,255,255,.3);
+  color:#fff;
+  width:38px; height:38px; font-size:15px;
+  border-radius:8px;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+  transition:all .15s;
+}
+header .icon-btn:active{
+  background:#fff;
+  color:var(--blue);
+}
+
+/* ---------- BOTTOM NAV ---------- */
+nav.bottom{
+  position:fixed; bottom:0; left:0; right:0; z-index:100;
+  background:var(--paper-card);
+  border-top:2px solid var(--blue);
+  display:flex; padding-bottom:var(--safe-b);
+  box-shadow:0 -2px 12px rgba(0,0,0,.08);
+}
+nav.bottom button{
+  flex:1; background:none; border:none;
+  color:var(--ink-muted);
+  padding:9px 4px 7px;
+  font-size:9px; cursor:pointer;
+  font-family:var(--font-mono);
+  font-weight:600; letter-spacing:.5px;
+  text-transform:uppercase;
+  display:flex; flex-direction:column; align-items:center; gap:3px;
+  transition:color .15s;
+  position:relative;
+}
+nav.bottom button span{font-size:19px; line-height:1;}
+nav.bottom button.active{color:var(--blue);}
+nav.bottom button.active::after{
+  content:"";
+  position:absolute; top:0; left:20%; right:20%; height:3px;
+  background:var(--blue);
+  border-radius:0 0 3px 3px;
+}
+
+/* ---------- MAIN ---------- */
+main{padding:14px; max-width:760px; margin:0 auto;}
+.view{display:none;}
+.view.active{display:block; animation:fadeIn .18s;}
+@keyframes fadeIn{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);}}
+
+/* ---------- TARJETAS ---------- */
+.card{
+  background:var(--paper-card);
+  border:1px solid var(--ink-line);
+  border-left:4px solid var(--blue);
+  border-radius:6px;
+  padding:16px; margin-bottom:14px;
+  position:relative;
+  box-shadow:0 1px 3px rgba(0,0,0,.04);
+}
+.card::after{
+  content:"";
+  position:absolute;
+  top:0; right:0;
+  width:24px; height:24px;
+  background:linear-gradient(225deg, var(--paper-grid) 50%, transparent 50%);
+  border-left:1px solid var(--ink-line);
+  border-bottom:1px solid var(--ink-line);
+  pointer-events:none;
+  opacity:.7;
+}
+.card h2{
+  font-family:var(--font-mono);
+  font-size:11px; text-transform:uppercase; letter-spacing:1.5px;
+  color:var(--blue); margin-bottom:14px; font-weight:700;
+  display:flex; align-items:center; gap:8px;
+  padding-bottom:10px;
+  border-bottom:2px dashed var(--ink-line);
+}
+.card h3{
+  font-family:var(--font-mono);
+  font-size:11px; color:var(--ink-soft); margin:16px 0 8px;
+  font-weight:600; text-transform:uppercase; letter-spacing:1px;
+}
+
+/* ---------- FORM ---------- */
+label{
+  display:block;
+  font-family:var(--font-mono);
+  font-size:10px; color:var(--ink-soft);
+  margin:12px 0 6px; font-weight:600;
+  text-transform:uppercase; letter-spacing:1px;
+}
+input,select,textarea{
+  width:100%; padding:12px;
+  background:#fff;
+  border:1px solid var(--ink-line);
+  color:var(--ink);
+  font-size:15px; font-family:var(--font-mono);
+  border-radius:6px;
+  transition:all .15s;
+}
+input:focus,select:focus,textarea:focus{
+  outline:none;
+  border-color:var(--blue);
+  box-shadow:0 0 0 3px var(--blue-light);
+}
+input[type=color]{padding:4px; height:44px;}
+textarea{font-family:var(--font-sans);}
+.row{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+
+.btn{
+  background:var(--blue); color:#fff;
+  border:none; padding:14px; font-weight:700;
+  font-size:13px; cursor:pointer; margin-top:12px; width:100%;
+  font-family:var(--font-mono);
+  text-transform:uppercase; letter-spacing:1px;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  border-radius:8px;
+  transition:all .15s;
+  box-shadow:0 2px 6px rgba(30,95,168,.25);
+}
+.btn:active{
+  transform:translateY(1px);
+  box-shadow:0 1px 2px rgba(30,95,168,.25);
+  background:var(--blue-dark);
+}
+.btn.ghost{
+  background:#fff; color:var(--blue);
+  border:2px solid var(--blue);
+  box-shadow:none;
+}
+.btn.ghost:active{background:var(--blue-light);}
+.btn.danger{background:var(--err); color:#fff; box-shadow:0 2px 6px rgba(185,28,28,.25);}
+.btn.ok{background:var(--ok); color:#fff; box-shadow:0 2px 6px rgba(21,128,61,.25);}
+.btn.sm{padding:10px 14px; font-size:11px; width:auto; margin:0;}
+
+/* ---------- LISTAS ---------- */
+.item-list{display:flex; flex-direction:column; gap:10px;}
+.item{
+  background:#fff;
+  border:1px solid var(--ink-line);
+  border-left:3px solid var(--blue);
+  border-radius:6px;
+  padding:12px;
+  display:flex; gap:12px; align-items:center;
+  cursor:pointer;
+  transition:all .15s;
+  box-shadow:0 1px 2px rgba(0,0,0,.04);
+}
+.item:active{
+  background:var(--blue-light);
+  border-color:var(--blue);
+}
+.item .thumb{
+  width:58px; height:58px;
+  background:var(--paper-grid);
+  border:1px solid var(--ink-line);
+  border-radius:6px;
+  flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  font-size:22px; overflow:hidden;
+}
+.item .thumb img{width:100%; height:100%; object-fit:cover;}
+.item .info{flex:1; min-width:0;}
+.item .info b{
+  display:block; font-size:14px; margin-bottom:3px;
+  font-weight:600; color:var(--ink);
+}
+.item .info small{
+  color:var(--ink-muted); font-size:10px;
+  display:block;
+  font-family:var(--font-mono);
+  letter-spacing:.3px;
+}
+.item .actions{display:flex; flex-direction:column; gap:4px;}
+.item .actions button{
+  background:none; border:none; color:var(--ink-muted);
+  font-size:15px; padding:4px 8px;
+}
+
+/* ---------- KPI ---------- */
+.kpi{
+  display:grid; grid-template-columns:1fr 1fr; gap:10px;
+  margin-bottom:14px;
+}
+.kpi > div{
+  background:#fff;
+  border:1px solid var(--ink-line);
+  border-top:3px solid var(--blue);
+  border-radius:6px;
+  padding:14px 12px;
+  position:relative;
+  box-shadow:0 1px 3px rgba(0,0,0,.04);
+}
+.kpi span{
+  display:block;
+  font-family:var(--font-mono);
+  font-size:9px; color:var(--ink-muted);
+  text-transform:uppercase; letter-spacing:1.5px;
+  margin-bottom:6px;
+}
+.kpi b{
+  font-family:var(--font-mono);
+  font-size:22px; color:var(--blue);
+  font-weight:700;
+  letter-spacing:-.5px;
+}
+
+/* ---------- TAGS ---------- */
+.tag{
+  display:inline-block;
+  padding:3px 9px;
+  font-family:var(--font-mono);
+  font-size:9px; font-weight:700;
+  text-transform:uppercase; letter-spacing:1px;
+  border-radius:20px;
+  border:1px solid;
+}
+.tag.cotizado{color:#1e40af; border-color:#93c5fd; background:var(--info-bg);}
+.tag.aprobado{color:#15803d; border-color:#86efac; background:var(--ok-bg);}
+.tag.taller{color:#a16207; border-color:#fde047; background:var(--warn-bg);}
+.tag.terminado{color:#15803d; border-color:#86efac; background:var(--ok-bg);}
+.tag.entregado{color:var(--ink-muted); border-color:var(--ink-line); background:var(--paper-grid);}
+.tag.maxima{color:#b91c1c; border-color:#fca5a5; background:var(--err-bg);}
+.tag.alta{color:#a16207; border-color:#fde047; background:var(--warn-bg);}
+.tag.media{color:#a16207; border-color:#fcd34d; background:#fefce8;}
+.tag.baja{color:#15803d; border-color:#86efac; background:var(--ok-bg);}
+.tag.verificado{color:#15803d; border-color:#86efac; background:var(--ok-bg);}
+.tag.estimado{color:#a16207; border-color:#fde047; background:var(--warn-bg);}
+
+/* ---------- MODAL ---------- */
+.modal-bg{
+  position:fixed; inset:0;
+  background:rgba(26,35,50,.6);
+  backdrop-filter:blur(4px);
+  z-index:200;
+  display:none; align-items:flex-end;
+}
+.modal-bg.show{display:flex;}
+.modal{
+  background:var(--paper-card);
+  width:100%;
+  border-top:4px solid var(--blue);
+  border-radius:16px 16px 0 0;
+  padding:20px; padding-bottom:calc(20px + var(--safe-b));
+  max-height:92vh; overflow-y:auto;
+  animation:slideUp .22s ease-out;
+  position:relative;
+}
+@keyframes slideUp{from{transform:translateY(100%);} to{transform:translateY(0);}}
+.modal::before{
+  content:"";
+  position:absolute;
+  top:8px; left:50%; transform:translateX(-50%);
+  width:40px; height:4px;
+  background:var(--ink-line);
+  border-radius:2px;
+}
+.modal h3{
+  font-family:var(--font-mono);
+  font-size:13px; color:var(--blue);
+  margin-bottom:14px;
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+  padding-bottom:10px;
+  border-bottom:2px dashed var(--ink-line);
+}
+.modal h4{
+  font-family:var(--font-mono);
+  font-size:10px; color:var(--blue);
+  margin:16px 0 8px;
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+}
+.modal table{width:100%; border-collapse:collapse; font-size:12px;}
+.modal th{
+  background:var(--paper-grid);
+  padding:8px; text-align:left;
+  font-family:var(--font-mono);
+  font-size:9px; color:var(--ink-soft);
+  font-weight:600;
+  text-transform:uppercase; letter-spacing:1px;
+  border-bottom:1px solid var(--ink-line);
+}
+.modal td{
+  padding:8px; border-bottom:1px solid var(--paper-grid);
+  font-family:var(--font-mono);
+  font-size:11px;
+  color:var(--ink);
+}
+.modal td b{color:var(--blue);}
+
+/* ---------- ALERTAS ---------- */
+.alert{
+  padding:12px; font-size:12px;
+  margin:10px 0;
+  border-left:4px solid;
+  border-radius:6px;
+  font-family:var(--font-mono);
+  line-height:1.5;
+}
+.alert.warn{background:var(--warn-bg); border-color:var(--warn); color:#78350f;}
+.alert.ok{background:var(--ok-bg); border-color:var(--ok); color:#14532d;}
+.alert.info{background:var(--info-bg); border-color:var(--blue); color:#1e3a8a;}
+.alert.err{background:var(--err-bg); border-color:var(--err); color:#7f1d1d;}
+
+/* ---------- FOTOS ---------- */
+.photo-grid{
+  display:grid; grid-template-columns:repeat(3,1fr); gap:8px;
+  margin-top:10px;
+}
+.photo-grid .photo{
+  aspect-ratio:1;
+  position:relative;
+  background:var(--paper-grid);
+  border:1px solid var(--ink-line);
+  border-radius:8px;
+  overflow:hidden;
+}
+.photo-grid .photo img{width:100%; height:100%; object-fit:cover;}
+.photo-grid .photo .del{
+  position:absolute; top:4px; right:4px;
+  background:var(--err); color:#fff;
+  border:none; width:24px; height:24px;
+  border-radius:50%;
+  font-size:12px; line-height:1;
+  box-shadow:0 2px 4px rgba(0,0,0,.2);
+}
+.photo-grid .add{
+  aspect-ratio:1;
+  border:2px dashed var(--ink-line);
+  background:#fff;
+  color:var(--blue); font-size:22px;
+  border-radius:8px;
+  display:flex; align-items:center; justify-content:center;
+  transition:all .15s;
+}
+.photo-grid .add:active{background:var(--blue-light); border-color:var(--blue);}
+.photo-grid .photo .photo-badge{
+  position:absolute; bottom:4px; left:4px;
+  background:var(--blue); color:#fff;
+  font-family:var(--font-mono);
+  font-size:8px; padding:2px 6px;
+  border-radius:8px;
+  letter-spacing:.5px;
+}
+
+/* ---------- LOGO UPLOADER ---------- */
+.logo-uploader{
+  display:flex; gap:14px; align-items:center;
+  padding:14px;
+  background:var(--paper-grid);
+  border:1px solid var(--ink-line);
+  border-radius:8px;
+}
+.logo-uploader .preview{
+  width:70px; height:70px;
+  background:#fff;
+  border:2px dashed var(--ink-line);
+  border-radius:8px;
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden; flex-shrink:0;
+}
+.logo-uploader .preview img{width:100%; height:100%; object-fit:contain; padding:4px;}
+.logo-uploader .info{flex:1; font-size:11px; color:var(--ink-soft); font-family:var(--font-mono); line-height:1.5;}
+
+/* ---------- CHECK ---------- */
+.check-item{
+  display:flex; gap:10px; align-items:center;
+  padding:12px;
+  background:#fff;
+  border:1px solid var(--ink-line);
+  border-radius:8px;
+  margin:8px 0;
+}
+.check-item input[type=checkbox]{
+  width:22px; height:22px; flex-shrink:0;
+  accent-color:var(--blue);
+}
+.check-item .txt{flex:1;}
+.check-item .txt b{
+  font-family:var(--font-mono);
+  font-size:11px; display:block;
+  letter-spacing:.3px;
+  color:var(--ink);
+}
+.check-item .txt small{
+  font-family:var(--font-mono);
+  font-size:9px; color:var(--ink-muted);
+  letter-spacing:1px; text-transform:uppercase;
+}
+
+/* ---------- EMPTY ---------- */
+.empty{text-align:center; padding:40px 20px; color:var(--ink-muted);}
+.empty .icon{font-size:44px; margin-bottom:12px; opacity:.4;}
+.empty p{
+  font-family:var(--font-mono);
+  font-size:11px; text-transform:uppercase;
+  letter-spacing:1.5px;
+}
+
+/* ---------- SEARCH ---------- */
+.search-box{position:relative; margin-bottom:12px;}
+.search-box input{padding-left:40px; background:#fff;}
+.search-box::before{
+  content:"⌕";
+  position:absolute; left:14px; top:50%;
+  transform:translateY(-50%);
+  font-size:20px; color:var(--blue);
+  font-family:var(--font-mono);
+}
+
+/* ---------- TOAST ---------- */
+#toast{
+  position:fixed; bottom:90px; left:50%;
+  transform:translateX(-50%) translateY(20px);
+  background:var(--ink); color:#fff;
+  padding:12px 20px;
+  font-family:var(--font-mono);
+  font-weight:700; font-size:12px;
+  text-transform:uppercase; letter-spacing:1px;
+  border-radius:24px;
+  opacity:0; transition:all .3s;
+  z-index:300; pointer-events:none;
+  max-width:90vw; text-align:center;
+  box-shadow:0 6px 20px rgba(0,0,0,.25);
+}
+#toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+
+/* ---------- MISC ---------- */
+.stamp{
+  display:inline-block;
+  font-family:var(--font-mono);
+  font-size:9px;
+  color:var(--blue);
+  border:1.5px solid var(--blue);
+  padding:2px 6px;
+  border-radius:4px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+}
+.hand-note{
+  font-family:var(--font-hand);
+  font-size:16px;
+  color:var(--blue);
+  transform:rotate(-1.5deg);
+  display:inline-block;
+}
+
+@media print{
+  header,nav.bottom,.no-print{display:none !important;}
+  body{background:#fff; color:#000; padding:0;}
+  body::before,body::after{display:none;}
+  .card{border:1px solid #ccc; page-break-inside:avoid; box-shadow:none;}
+  .card::after{display:none;}
+  .card h2,.kpi b{color:#1e5fa8;}
+}
+</style>
+</head>
+<body>
+
+<!-- ================= HEADER ================= -->
+<header>
+  <div class="logo-box" id="headerLogo">
+    <span class="fallback" id="headerLogoFallback">F</span>
+  </div>
+  <div class="titles">
+    <h1 id="hTitle">FORZA TALLER</h1>
+    <div class="subtitle" id="hSubtitle">CUADERNO TÉCNICO · <span id="horaActual">--:--:--</span></div>
+  </div>
+  <button class="icon-btn" onclick="abrirCamaraRapida()" title="Foto">📷</button>
+  <button class="icon-btn" onclick="irA('menu')" title="Menú">☰</button>
+</header>
+
+<!-- ================= MAIN ================= -->
+<main>
+
+  <!-- ---------- INICIO ---------- -->
+  <section id="view-inicio" class="view active">
+
+    <div class="card" style="padding:10px 16px; border-left-color:var(--ok);">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span class="stamp">CUADERNO · TALLER</span>
+        <span class="stamp" id="stampFecha">--.--.----</span>
+      </div>
+    </div>
+
+    <div class="kpi">
+      <div><span>PROYECTOS</span><b id="iniProy">0</b></div>
+      <div><span>VANOS</span><b id="iniVanos">0</b></div>
+      <div><span>FOTOS</span><b id="iniFotos">0</b></div>
+      <div><span>PENDIENTES</span><b id="iniPend">0</b></div>
+    </div>
+
+    <div class="card">
+      <h2>// ACCIONES RÁPIDAS</h2>
+      <button class="btn" onclick="nuevoProyecto()">+ NUEVO PROYECTO</button>
+      <button class="btn ghost" onclick="irA('proyectos')">▸ VER OBRAS</button>
+      <button class="btn ghost" onclick="irA('camara')">▸ TOMAR EVIDENCIA</button>
+      <button class="btn ghost" onclick="irA('precios')">▸ LISTA DE PRECIOS</button>
+    </div>
+
+    <div class="card">
+      <h2>// ÚLTIMAS OBRAS</h2>
+      <div id="iniRecientes" class="item-list"></div>
+    </div>
+
+  </section>
+
+  <!-- ---------- PROYECTOS ---------- -->
+  <section id="view-proyectos" class="view">
+    <div class="search-box">
+      <input id="buscar" placeholder="Buscar cliente u obra..." oninput="renderProyectos()">
+    </div>
+    <div id="listaProyectos" class="item-list"></div>
+    <button class="btn" style="margin-top:14px;" onclick="nuevoProyecto()">+ NUEVO PROYECTO</button>
+  </section>
+
+  <!-- ---------- PROYECTO DETALLE ---------- -->
+  <section id="view-proyecto" class="view">
+    <div class="card" id="pryHeaderCard"></div>
+
+    <div class="card">
+      <h2>// AGREGAR VANO</h2>
+
+      <label>Serie</label>
+      <select id="prySerie">
+        <option value="3100">3100 — Batiente / Puertas</option>
+        <option value="4100" selected>4100 — Corrediza</option>
+        <option value="5100">5100 — Monumental</option>
+      </select>
+
+      <label>Configuración</label>
+      <select id="pryConf"></select>
+
+      <div class="row">
+        <div><label>Alto H (mm)</label><input id="pryH" type="number" value="1800" inputmode="numeric"></div>
+        <div><label>Ancho W (mm)</label><input id="pryW" type="number" value="1500" inputmode="numeric"></div>
+      </div>
+
+      <div class="row">
+        <div><label>Cantidad</label><input id="pryQty" type="number" value="1" min="1" inputmode="numeric"></div>
+        <div><label>Zona viento</label>
+          <select id="pryZona">
+            <option>A</option><option selected>B</option><option>C</option>
+            <option>D</option><option>E</option><option>F</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <div><label>Acabado</label>
+          <select id="pryAcabado">
+            <option>Nogal</option><option>Champagne</option><option>Gris Europa</option>
+            <option>Negro Anodizado</option><option>Negro Europa</option><option>Blanco 07</option>
+            <option>Anodizado Natural</option><option>Pintura</option>
+          </select>
+        </div>
+        <div><label>Vidrio</label>
+          <select id="pryVidrio">
+            <option value="mono_6">Monolítico 6 mm</option>
+            <option value="mono_9">Monolítico 9 mm</option>
+            <option value="temp_6">Templado 6 mm</option>
+            <option value="lam_3_3">Laminado 3+3</option>
+            <option value="dvh_24" selected>DVH 24 mm</option>
+            <option value="dvh_24_low_e">DVH Low-E</option>
+          </select>
+        </div>
+      </div>
+
+      <label>Ubicación / Etiqueta</label>
+      <input id="pryUbic" placeholder="Ej: Recámara 1, Fachada norte">
+
+      <button class="btn" onclick="agregarVano()">+ AGREGAR VANO</button>
+    </div>
+
+    <div class="card">
+      <h2>// VANOS DEL PROYECTO</h2>
+      <div id="listaVanos" class="item-list"></div>
+      <div id="pryTotales" style="margin-top:16px; text-align:right;"></div>
+    </div>
+  </section>
+
+  <!-- ---------- CÁMARA ---------- -->
+  <section id="view-camara" class="view">
+    <div class="card">
+      <h2>// NUEVA EVIDENCIA</h2>
+
+      <label>Proyecto destino</label>
+      <select id="camProyecto"></select>
+
+      <label>Descripción</label>
+      <input id="camDesc" placeholder="Ej: Fachada terminada">
+
+      <label>Tipo</label>
+      <select id="camTipo">
+        <option value="antes">🔴 Antes</option>
+        <option value="durante" selected>🟡 Durante</option>
+        <option value="despues">🟢 Después</option>
+        <option value="entrega">📦 Entrega</option>
+        <option value="problema">⚠️ Problema</option>
+      </select>
+
+      <div class="photo-grid" id="camGrid">
+        <button class="add" onclick="tomarFoto()">📷</button>
+      </div>
+
+      <button class="btn ok" onclick="guardarEvidencias()">GUARDAR EVIDENCIAS</button>
+    </div>
+
+    <div class="card">
+      <h2>// UBICACIÓN GPS</h2>
+      <div id="gpsInfo" class="alert info">Obteniendo...</div>
+      <button class="btn ghost sm" style="margin-top:10px; width:100%;" onclick="pedirGPS()">↻ ACTUALIZAR GPS</button>
+    </div>
+  </section>
+
+  <!-- ---------- GALERÍA ---------- -->
+  <section id="view-galeria" class="view">
+    <div class="search-box">
+      <input id="buscarFoto" placeholder="Buscar..." oninput="renderGaleria()">
+    </div>
+    <div class="photo-grid" id="galeriaGrid"></div>
+  </section>
+
+  <!-- ---------- PRECIOS ---------- -->
+  <section id="view-precios" class="view">
+    <div class="card">
+      <h2>// LISTA DE PRECIOS</h2>
+
+      <label>Proveedor</label>
+      <input id="prProveedor" onchange="guardarPrecios()">
+
+      <label>Fecha actualización</label>
+      <input id="prFecha" type="date" onchange="guardarPrecios()">
+
+      <div class="row">
+        <div><label>Longitud barra (m)</label><input id="prLongBarra" type="number" step="0.01" value="6.10" onchange="guardarPrecios()"></div>
+        <div><label>Merma default (%)</label><input id="prMerma" type="number" step="0.5" value="5" onchange="guardarPrecios()"></div>
+      </div>
+
+      <h3>Precio por kg — Base BO</h3>
+      <input id="prPrecioKgBO" type="number" step="0.5" value="255" onchange="guardarPrecios()">
+
+      <h3>Multiplicador por acabado vs BO</h3>
+      <div id="prMultiplos"></div>
+
+      <button class="btn ghost sm" style="margin-top:14px; width:100%;" onclick="verTablaPerfiles()">
+        ▸ VER TABLA DE PERFILES
+      </button>
+      <button class="btn ghost sm" style="width:100%;" onclick="verTablaHerrajes()">
+        ▸ VER TABLA DE HERRAJES
+      </button>
+      <button class="btn ghost sm" style="width:100%;" onclick="verTablaVidrio()">
+        ▸ VER TABLA DE VIDRIO
+      </button>
+    </div>
+
+    <div class="card">
+      <h2>// CALIBRACIÓN</h2>
+      <p style="font-size:11px; color:var(--ink-muted); margin-bottom:12px; font-family:var(--font-mono);">
+        ESTADO: <b id="calEstado">—</b>
+      </p>
+      <div id="calLista"></div>
+    </div>
+
+    <div class="card">
+      <h2>// IMPORT / EXPORT</h2>
+      <button class="btn ghost" onclick="exportarPrecios()">▲ EXPORTAR PRECIOS JSON</button>
+      <button class="btn ghost" onclick="document.getElementById('fileImportPrecios').click()">▼ IMPORTAR PRECIOS JSON</button>
+      <input type="file" id="fileImportPrecios" accept=".json" style="display:none" onchange="importarPrecios(event)">
+    </div>
+  </section>
+
+  <!-- ---------- MENÚ ---------- -->
+  <section id="view-menu" class="view">
+
+    <div class="card">
+      <h2>// PERSONALIZACIÓN DEL TALLER</h2>
+
+      <label>Nombre del taller</label>
+      <input id="cfgNombre" placeholder="Ej: Canceles García" onchange="guardarMarca()">
+
+      <label>Subtítulo</label>
+      <input id="cfgSubtitulo" placeholder="Ej: Cuaderno técnico" onchange="guardarMarca()">
+
+      <label>Logo</label>
+      <div class="logo-uploader">
+        <div class="preview" id="logoPreview">
+          <span style="font-size:26px; color:var(--ink-muted);">🖼️</span>
+        </div>
+        <div class="info">
+          Sube el logo del taller (PNG/JPG).<br>
+          <button class="btn ghost sm" style="margin-top:10px; width:100%;" onclick="document.getElementById('fileLogo').click()">
+            ▸ ELEGIR IMAGEN
+          </button>
+          <button class="btn ghost sm" style="margin-top:6px; width:100%;" onclick="borrarLogo()">
+            ✕ QUITAR LOGO
+          </button>
+        </div>
+      </div>
+      <input type="file" id="fileLogo" accept="image/*" style="display:none" onchange="procesarLogo(event)">
+
+      <h3>Colores de marca</h3>
+      <div class="row">
+        <div>
+          <label>Azul principal</label>
+          <input type="color" id="cfgColorPrimary" onchange="guardarMarca()">
+        </div>
+        <div>
+          <label>Papel (fondo)</label>
+          <input type="color" id="cfgColorBg" onchange="guardarMarca()">
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>Tarjetas</label>
+          <input type="color" id="cfgColorPanel" onchange="guardarMarca()">
+        </div>
+        <div>
+          <label>Grid</label>
+          <input type="color" id="cfgColorPanel2" onchange="guardarMarca()">
+        </div>
+      </div>
+      <button class="btn ghost sm" style="width:100%;" onclick="restaurarColores()">↻ RESTAURAR COLORES</button>
+    </div>
+
+    <div class="card">
+      <h2>// PARÁMETROS DE CÁLCULO</h2>
+      <label>Margen de ganancia (%)</label>
+      <input id="cfgMargen" type="number" value="35" onchange="guardarCfg()">
+      <label>Descuento global (%)</label>
+      <input id="cfgDesc" type="number" value="0" step="0.5" onchange="guardarCfg()">
+      <label>IVA (%)</label>
+      <input id="cfgIva" type="number" value="16" onchange="guardarCfg()">
+      <label>Factor herraje</label>
+      <input id="cfgFactorH" type="number" value="1.0" step="0.05" onchange="guardarCfg()">
+    </div>
+
+    <div class="card">
+      <h2>// DATOS</h2>
+      <button class="btn ghost" onclick="exportarTodo()">▲ EXPORTAR TODO (JSON)</button>
+      <button class="btn ghost" onclick="document.getElementById('fileImport').click()">▼ IMPORTAR JSON</button>
+      <input type="file" id="fileImport" accept=".json" style="display:none" onchange="procesarImport(event)">
+      <button class="btn danger" onclick="borrarTodo()">✕ BORRAR TODOS LOS DATOS</button>
+    </div>
+
+    <div class="card">
+      <h2>// ACERCA DE</h2>
+      <p style="font-size:12px; color:var(--ink-soft); line-height:1.6;">
+        <b style="color:var(--blue);">FORZA TALLER</b> · v2.0<br>
+        Cuaderno técnico de taller.<br>
+        Datos locales (IndexedDB) · Funciona sin internet.<br>
+        <span class="hand-note">Hecho para trabajar con una mano.</span>
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<!-- ================= BOTTOM NAV ================= -->
+<nav class="bottom">
+  <button data-view="inicio" class="active"><span>🏠</span>Inicio</button>
+  <button data-view="proyectos"><span>📁</span>Obras</button>
+  <button data-view="camara"><span>📷</span>Foto</button>
+  <button data-view="galeria"><span>🖼️</span>Galería</button>
+  <button data-view="menu"><span>⚙️</span>Ajustes</button>
+</nav>
+
+<!-- ================= MODAL ================= -->
+<div class="modal-bg" id="modalBg" onclick="if(event.target===this)cerrarModal()">
+  <div class="modal" id="modalContent"></div>
+</div>
+
+<!-- ================= TOAST ================= -->
+<div id="toast"></div>
+
+<!-- ================= INPUT FOTO ================= -->
+<input type="file" id="fileFoto" accept="image/*" capture="environment"
+       style="display:none" onchange="procesarFoto(event)">
+
+<script>
+/* =========================================================
+   UTILIDADES
+   ========================================================= */
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+
+function toast(msg, tipo="ok"){
+  const t=$('#toast');
+  t.textContent=msg;
+  const colors = {
+    ok:"var(--ok)", warn:"var(--warn)", err:"var(--err)", info:"var(--blue)"
+  };
+  t.style.background = colors[tipo] || colors.ok;
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t=setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+/* =========================================================
+   BASE DE DATOS FORZA
+   ========================================================= */
+const DB = {
+  perfiles: {
+    "1830":{n:"Cerco liso ventana", p:1.25}, "1824":{n:"Hoja lisa ventana", p:1.30},
+    "1823":{n:"Pilastra lisa ventana", p:1.30}, "667":{n:"Junquillo duo redondo", p:0.35},
+    "1825":{n:"Cerco liso puerta", p:1.40}, "1826":{n:"Pilastra lisa puerta", p:1.40},
+    "1829":{n:'Zoclo inferior 5"', p:1.35}, "2351":{n:"Fijo riel triple", p:1.40},
+    "1832":{n:"Hoja lisa monumental", p:1.40}, "12550":{n:"Riel 3 vías", p:1.50},
+    "508":{n:"Riel adaptador", p:1.40}, "298":{n:"Hoja baja perimetral duo", p:1.35},
+    "199":{n:"Hoja baja mosquitero", p:1.35}, "276":{n:"Traslape hoja baja", p:1.30},
+    "292":{n:"Unión 4 hojas", p:1.30}, "319":{n:"Hoja alta perimetral duo", p:1.35},
+    "317":{n:"Hoja alta mosquitero", p:1.35}, "344":{n:"Traslape hoja alta", p:1.30},
+    "1546":{n:"Riel bajo 2 vías ceja", p:1.73}, "548":{n:"Riel adicional", p:1.60},
+    "56":{n:"Hoja perimetral duo", p:1.60}, "59":{n:"Hoja perimetral mosquitero", p:1.60},
+    "44":{n:"Traslape", p:1.50}, "58":{n:"Unión 4 hojas", p:1.50}
+  },
+  configs: {
+    "3100":{
+      "3100-PROY-INT":{nom:"Ventana apertura interior",
+        cortes:[["1830","45°",2,"H"],["1830","45°",2,"W"],["1823","45°",2,"H-51"],
+                ["1823","45°",2,"W-49"],["667","45°",2,"H-122"],["667","45°",2,"W-121"]],
+        herraje:[["BI2500STC",2],["VE2500",8],["F203",1]]},
+      "3100-PROY-EXT":{nom:"Ventana apertura exterior",
+        cortes:[["1830","45°",2,"H"],["1830","45°",2,"W"],["1824","45°",2,"H-51"],
+                ["1824","45°",2,"W-51"],["667","45°",2,"H-122"],["667","45°",2,"W-121"]],
+        herraje:[["BI2500STC",2],["VE2500",8],["OPI230",1]]},
+      "3100-FIJA":{nom:"Ventana fija",
+        cortes:[["1830","45°",2,"H"],["1830","45°",2,"W"],["667","45°",2,"H-60"],["667","45°",2,"W-60"]],
+        herraje:[["VE2500",4]]},
+      "3100-PTA-LIG":{nom:"Puerta ligera",
+        cortes:[["1825","45°-90°",2,"H"],["1825","45°",1,"W"],["1826","45°-90°",2,"H-46"],
+                ["1826","45°",1,"W-76"],["1829","90°",1,"W-204"],["667","45°",2,"H-226"],
+                ["667","45°",2,"W-204"]],
+        herraje:[["BI2501STC",2],["PU2500",4]]},
+      "3100-PTA-MON":{nom:"Puerta monumental",
+        cortes:[["2351","45°-90°",2,"H"],["2351","45°",1,"W"],["1832","45°-90°",2,"H-25"],
+                ["1832","45°",1,"W-35"],["1829","90°",1,"W-240"],["667","45°",2,"H-256"],
+                ["667","45°",2,"W-256"]],
+        herraje:[["ES500",4],["BI2501STC",2],["PU2500",2]]}
+    },
+    "4100":{
+      "4100-B-2H-MOSQ":{nom:"Ventana 2H + mosquitero",
+        cortes:[["12550","45°",2,"H"],["12550","45°",2,"W"],["298","45°",4,"H-60"],
+                ["298","45°",4,"(W+8)/2"],["199","45°",2,"H-60"],["199","45°",2,"(W+8)/2"],
+                ["276","90°",2,"H-64"]],
+        herraje:[["CA4101P",4],["CA4100PM",2],["ES500",20],["K4100",2],["F304",2],
+                 ["F307",2],["F308",2]]},
+      "4100-B-3H-APIL":{nom:"Ventana 3H apilable",
+        cortes:[["12550","45°",2,"H"],["12550","45°",2,"W"],["298","45°",6,"H-60"],
+                ["298","45°",6,"(W+80)/3"],["276","90°",4,"H-64"]],
+        herraje:[["CA4101P",6],["ES500",20],["K4100",3],["F304",2],["F308",2]]},
+      "4100-B-4H-CENTRO":{nom:"Ventana 4H cierre centro",
+        cortes:[["12550","45°",2,"H"],["12550","45°",2,"W"],["298","45°",8,"H-60"],
+                ["298","45°",8,"(W+72)/4"],["199","45°",4,"H-60"],["199","45°",4,"(W+72)/4"],
+                ["276","90°",6,"H-64"],["292","90°",2,"H-78"]],
+        herraje:[["CA4101P",8],["CA4100PM",4],["ES500",32],["K4100",4],["F304",2],
+                 ["F307",2],["F308",1]]},
+      "4100-A-2H-MOSQ":{nom:"Ventana 2H altas + mosq",
+        cortes:[["12550","45°",2,"H"],["12550","45°",2,"W"],["319","45°",4,"H-60"],
+                ["319","45°",4,"(W+29)/2"],["317","45°",2,"H-60"],["317","45°",2,"(W+29)/2"],
+                ["344","90°",2,"H-64"]],
+        herraje:[["CA4101P",4],["CA4100PM",2],["ES500",20],["K4100",2],["F304",2],
+                 ["F307",2],["F308",2]]}
+    },
+    "5100":{
+      "5100-2H-MOSQ":{nom:"Ventana 2H + mosquitero",
+        cortes:[["1546","45°",2,"H"],["1546","45°",2,"W"],["548","45°",2,"H"],
+                ["548","45°",2,"W"],["56","45°",4,"H-50"],["56","45°",4,"(W+34)/2"],
+                ["59","45°",2,"H-50"],["59","45°",2,"(W+34)/2"],["44","90°",2,"H-54"]],
+        herraje:[["CA5101M",4],["CA5100M",2],["ES504",12],["ES502",12],["K5100",2],
+                 ["F304",2],["F307",2],["F309",2]]},
+      "5100-3H-APIL":{nom:"Ventana 3H apilable",
+        cortes:[["1546","45°",2,"H"],["1546","45°",2,"W"],["548","45°",2,"H"],
+                ["548","45°",2,"W"],["56","45°",6,"H-50"],["56","45°",6,"(W+116)/3"],
+                ["44","90°",4,"H-54"]],
+        herraje:[["CA5101M",6],["ES504",12],["ES502",12],["K5100",3],["F304",2],["F309",2]]},
+      "5100-4H-CENTRO":{nom:"Ventana 4H cierre centro",
+        cortes:[["1546","45°",2,"H"],["1546","45°",2,"W"],["548","45°",2,"H"],
+                ["548","45°",2,"W"],["56","45°",8,"H-50"],["56","45°",8,"(W+120)/4"],
+                ["59","45°",4,"H-50"],["59","45°",4,"(W+120)/4"],["44","90°",4,"H-54"],
+                ["58","90°",2,"H-68"]],
+        herraje:[["CA5101M",8],["CA5100M",4],["ES504",24],["ES502",12],["K5100",4],
+                 ["F304",2],["F307",2],["F309",1]]}
+    }
+  }
+};
+
+/* =========================================================
+   PRECIOS INICIALES
+   ========================================================= */
+const INITIAL_PRICES = {
+  moneda:"MXN", proveedor:"ALUGAMA / Fapim / STAC",
+  fecha_actualizacion:new Date().toISOString().slice(0,10),
+  longitud_barra_m:6.10, merma_default_pct:5,
+  precio_kg_por_acabado:{BO:255, nogal:285, champagne:285, gris_europa:285,
+                        negro_anodizado:268, negro_europa:290, blanco_07:275,
+                        anodizado_natural:242, pintura:280},
+  mult_acabado_vs_BO:{BO:1.00, anodizado_natural:0.95, pintura:1.10,
+                     nogal:1.12, champagne:1.12, gris_europa:1.12,
+                     negro_anodizado:1.05, negro_europa:1.14, blanco_07:1.08},
+  kg_m_por_perfil:{
+    "12550":1.043,"297":0.706,"298":0.756,"1830":0.600,"1824":0.620,
+    "1823":0.620,"667":0.110,"1825":0.730,"1826":0.810,"1829":0.750,
+    "2351":0.720,"1832":0.730,"508":0.650,"199":0.650,"276":0.480,
+    "292":0.480,"319":0.650,"317":0.650,"344":0.480,"1546":0.890,
+    "548":0.780,"56":0.780,"59":0.820,"44":0.520,"58":0.520
+  },
+  herrajes_por_codigo:{
+    "ES500":{nom:"Escuadra botón", rango:[3,6], margen:40, criticidad:"maxima"},
+    "CA4101P":{nom:"Carretilla 2R 90kg", rango:[45,70], margen:35, criticidad:"maxima"},
+    "CA4100PM":{nom:"Carretilla 1R 37.5kg", rango:[30,50], margen:35, criticidad:"media"},
+    "CA5101M":{nom:"Carretilla metal 2R 150kg", rango:[90,140], margen:35, criticidad:"alta"},
+    "CA5100M":{nom:"Carretilla metal 1R 75kg", rango:[60,90], margen:35, criticidad:"media"},
+    "K4100":{nom:"Kit plásticos 4100", rango:[25,45], margen:45, criticidad:"alta"},
+    "K5100":{nom:"Kit plásticos 5100", rango:[25,45], margen:45, criticidad:"alta"},
+    "F304":{nom:"Cierre embutido", rango:[15,25], margen:45, criticidad:"media"},
+    "F307":{nom:"Uñero sin tornillo", rango:[8,15], margen:45, criticidad:"media"},
+    "F308":{nom:"Juego ganchos 4100", rango:[10,20], margen:45, criticidad:"media"},
+    "F309":{nom:"Juego ganchos 5100", rango:[10,20], margen:45, criticidad:"media"},
+    "ES502":{nom:"Escuadra botón marco 5100", rango:[3,6], margen:40, criticidad:"media"},
+    "ES504":{nom:"Escuadra botón hoja 5100", rango:[3,6], margen:40, criticidad:"media"},
+    "BI2500STC":{nom:"Bisagra 2 palas", rango:[15,35], margen:40, criticidad:"puertas"},
+    "BI2501STC":{nom:"Bisagra 3 palas", rango:[15,35], margen:40, criticidad:"puertas"},
+    "VE2500":{nom:"Escuadra mecánica ventana", rango:[8,15], margen:40, criticidad:"3100"},
+    "PU2500":{nom:"Escuadra mecánica puerta", rango:[8,15], margen:40, criticidad:"3100"},
+    "OPI230":{nom:"Roto operador", rango:[60,100], margen:30, criticidad:"proyeccion"},
+    "OPI240":{nom:"Operador eléctrico", rango:[250,450], margen:30, criticidad:"proyeccion"},
+    "F203":{nom:"Jaladera rodillo", rango:[15,25], margen:40, criticidad:"baja"},
+    "960203C":{nom:"Carretilla STAC 100kg", rango:[80,120], margen:35, criticidad:"alterna"},
+    "96001":{nom:"Carretilla STAC 5100", rango:[80,120], margen:35, criticidad:"alterna"},
+    "JA307NE":{nom:"Manilla", rango:[25,50], margen:50, criticidad:"baja"},
+    "JA309NE":{nom:"Manilla plana", rango:[25,50], margen:50, criticidad:"baja"},
+    "JA308NE":{nom:"Manilla embutida 5100", rango:[60,90], margen:50, criticidad:"baja"},
+    "JA1832NE":{nom:"Manilla multipunto c/llave", rango:[120,250], margen:50, criticidad:"upgrade"},
+    "J406":{nom:"Sistema multipunto 2 cierres", rango:[120,250], margen:50, criticidad:"upgrade"},
+    "J400":{nom:"Tirador jaladera", rango:[20,40], margen:50, criticidad:"baja"},
+    "J402":{nom:"Tirador cierre", rango:[20,40], margen:50, criticidad:"baja"},
+    "JW-T02":{nom:"Cierre presión", rango:[10,20], margen:45, criticidad:"baja"},
+    "UP2500":{nom:"Unión puerta", rango:[10,18], margen:40, criticidad:"baja"},
+    "UV2500":{nom:"Unión ventana", rango:[10,18], margen:40, criticidad:"baja"}
+  },
+  vidrio_por_especificacion:{
+    "mono_6":{nom:"Monolítico 6 mm", rango_m2:[180,260]},
+    "mono_9":{nom:"Monolítico 9 mm", rango_m2:[300,420]},
+    "temp_6":{nom:"Templado 6 mm", rango_m2:[350,500]},
+    "lam_3_3":{nom:"Laminado 3+3", rango_m2:[400,600]},
+    "dvh_24":{nom:"DVH 24 mm", rango_m2:[450,650]},
+    "dvh_24_low_e":{nom:"DVH 24 mm Low-E", base:"dvh_24", incremento_pct:[30,40]}
+  },
+  servicios:{pulido_canto:{unidad:"m", rango:[15,30]}},
+  calibracion:{
+    estado:"pendiente",
+    pasos:[
+      {id:"herrajes", desc:"Cotización de 8 códigos Pareto", hecho:false},
+      {id:"vidrio", desc:"2 vidrierías cotizan m² + pulido", hecho:false},
+      {id:"deduccion", desc:"Armar 1 ventana por tipología", hecho:false},
+      {id:"empaques", desc:"Pesar/medir rollo nuevo real", hecho:false}
+    ]
+  }
+};
+
+const INITIAL_MARCA = {
+  nombre:"FORZA Taller",
+  subtitulo:"Cuaderno técnico",
+  logoDataUrl:null,
+  colorPrimary:"#1e5fa8",
+  colorBg:"#fafaf6",
+  colorPanel:"#ffffff",
+  colorPanel2:"#e8ecef"
+};
+
+/* =========================================================
+   INDEXEDDB
+   ========================================================= */
+const DB_NAME="forza_taller";
+const DB_VER=2;
+
+function abrirDB(){
+  return new Promise((res,rej)=>{
+    const req=indexedDB.open(DB_NAME,DB_VER);
+    req.onupgradeneeded=e=>{
+      const d=e.target.result;
+      if(!d.objectStoreNames.contains('proyectos'))
+        d.createObjectStore('proyectos',{keyPath:'id'});
+      if(!d.objectStoreNames.contains('fotos'))
+        d.createObjectStore('fotos',{keyPath:'id'});
+      if(!d.objectStoreNames.contains('config'))
+        d.createObjectStore('config',{keyPath:'k'});
+    };
+    req.onsuccess=e=>res(e.target.result);
+    req.onerror=rej;
+  });
+}
+async function idbGet(store,key){
+  const d=await abrirDB();
+  return new Promise((res,rej)=>{
+    const req=d.transaction(store,'readonly').objectStore(store).get(key);
+    req.onsuccess=()=>res(req.result);
+    req.onerror=rej;
+  });
+}
+async function idbGetAll(store){
+  const d=await abrirDB();
+  return new Promise((res,rej)=>{
+    const req=d.transaction(store,'readonly').objectStore(store).getAll();
+    req.onsuccess=()=>res(req.result||[]);
+    req.onerror=rej;
+  });
+}
+async function idbPut(store,val){
+  const d=await abrirDB();
+  return new Promise((res,rej)=>{
+    const tx=d.transaction(store,'readwrite');
+    tx.objectStore(store).put(val);
+    tx.oncomplete=res;
+    tx.onerror=rej;
+  });
+}
+async function idbDel(store,key){
+  const d=await abrirDB();
+  return new Promise((res,rej)=>{
+    const tx=d.transaction(store,'readwrite');
+    tx.objectStore(store).delete(key);
+    tx.oncomplete=res;
+    tx.onerror=rej;
+  });
+}
+
+/* =========================================================
+   ESTADO
+   ========================================================= */
+const AppState = {
+  precios: INITIAL_PRICES,
+  marca: INITIAL_MARCA,
+  cfg: {margen:35, descuento:0, iva:16, factorH:1.0},
+  proyectoActual: null,
+  fotosTemp: [],
+  gpsActual: null
+};
+
+/* =========================================================
+   APLICAR MARCA
+   ========================================================= */
+function aplicarMarca(){
+  const m = AppState.marca;
+  const root = document.documentElement;
+  root.style.setProperty('--blue', m.colorPrimary);
+  root.style.setProperty('--blue-dark', shadeColor(m.colorPrimary,-15));
+  root.style.setProperty('--blue-light', shadeColor(m.colorPrimary,75));
+  root.style.setProperty('--paper', m.colorBg);
+  root.style.setProperty('--paper-card', m.colorPanel);
+  root.style.setProperty('--paper-grid', m.colorPanel2);
+
+  $('#hTitle').textContent = (m.nombre || "FORZA Taller").toUpperCase();
+  const sub = (m.subtitulo||'Cuaderno técnico').toUpperCase();
+  $('#hSubtitle').innerHTML = `${sub} · <span id="horaActual">--:--:--</span>`;
+
+  const logoBox = $('#headerLogo');
+  if(m.logoDataUrl){
+    logoBox.innerHTML = `<img src="${m.logoDataUrl}" alt="logo">`;
+  } else {
+    const inicial = (m.nombre||"F").trim().charAt(0).toUpperCase();
+    logoBox.innerHTML = `<span class="fallback">${inicial}</span>`;
+  }
+  document.title = m.nombre || "FORZA Taller";
+
+  $('#cfgNombre').value = m.nombre;
+  $('#cfgSubtitulo').value = m.subtitulo;
+  $('#cfgColorPrimary').value = m.colorPrimary;
+  $('#cfgColorBg').value = m.colorBg;
+  $('#cfgColorPanel').value = m.colorPanel;
+  $('#cfgColorPanel2').value = m.colorPanel2;
+
+  const prev = $('#logoPreview');
+  if(m.logoDataUrl){
+    prev.innerHTML = `<img src="${m.logoDataUrl}" alt="logo">`;
+  } else {
+    prev.innerHTML = `<span style="font-size:26px; color:var(--ink-muted);">🖼️</span>`;
+  }
+}
+
+function shadeColor(hex, percent){
+  const n = parseInt(hex.replace('#',''),16);
+  let r = (n>>16) & 0xff;
+  let g = (n>>8) & 0xff;
+  let b = n & 0xff;
+  if(percent > 0){
+    r = Math.round(r + (255-r)*(percent/100));
+    g = Math.round(g + (255-g)*(percent/100));
+    b = Math.round(b + (255-b)*(percent/100));
+  } else {
+    r = Math.round(r * (1+percent/100));
+    g = Math.round(g * (1+percent/100));
+    b = Math.round(b * (1+percent/100));
+  }
+  return '#' + [r,g,b].map(x=>x.toString(16).padStart(2,'0')).join('');
+}
+
+/* =========================================================
+   CARGA INICIAL
+   ========================================================= */
+async function cargarEstado(){
+  const m = await idbGet('config','marca');
+  if(m) AppState.marca = {...INITIAL_MARCA, ...m};
+
+  const p = await idbGet('config','precios');
+  if(p) AppState.precios = {...INITIAL_PRICES, ...p};
+
+  const c = await idbGet('config','cfg');
+  if(c) AppState.cfg = {...AppState.cfg, ...c};
+
+  aplicarMarca();
+  cargarPreciosUI();
+  cargarCfgUI();
+}
+
+async function guardarMarca(){
+  AppState.marca = {
+    nombre: $('#cfgNombre').value.trim() || "FORZA Taller",
+    subtitulo: $('#cfgSubtitulo').value.trim() || "Cuaderno técnico",
+    logoDataUrl: AppState.marca.logoDataUrl,
+    colorPrimary: $('#cfgColorPrimary').value,
+    colorBg: $('#cfgColorBg').value,
+    colorPanel: $('#cfgColorPanel').value,
+    colorPanel2: $('#cfgColorPanel2').value
+  };
+  await idbPut('config',{k:'marca', ...AppState.marca});
+  aplicarMarca();
+  toast("Marca actualizada ✓");
+}
+
+async function procesarLogo(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const dataUrl = await comprimirImagen(file, 400, 0.85);
+  AppState.marca.logoDataUrl = dataUrl;
+  await idbPut('config',{k:'marca', ...AppState.marca});
+  aplicarMarca();
+  toast("Logo actualizado ✓");
+  e.target.value='';
+}
+
+async function borrarLogo(){
+  if(!confirm("¿Quitar el logo actual?")) return;
+  AppState.marca.logoDataUrl = null;
+  await idbPut('config',{k:'marca', ...AppState.marca});
+  aplicarMarca();
+  toast("Logo eliminado");
+}
+
+async function restaurarColores(){
+  AppState.marca.colorPrimary = INITIAL_MARCA.colorPrimary;
+  AppState.marca.colorBg = INITIAL_MARCA.colorBg;
+  AppState.marca.colorPanel = INITIAL_MARCA.colorPanel;
+  AppState.marca.colorPanel2 = INITIAL_MARCA.colorPanel2;
+  await idbPut('config',{k:'marca', ...AppState.marca});
+  aplicarMarca();
+  toast("Colores restaurados");
+}
+
+async function guardarCfg(){
+  AppState.cfg = {
+    margen:parseFloat($('#cfgMargen').value)||35,
+    descuento:parseFloat($('#cfgDesc').value)||0,
+    iva:parseFloat($('#cfgIva').value)||16,
+    factorH:parseFloat($('#cfgFactorH').value)||1
+  };
+  await idbPut('config',{k:'cfg', ...AppState.cfg});
+  toast("Parámetros guardados ✓");
+}
+
+function cargarCfgUI(){
+  $('#cfgMargen').value = AppState.cfg.margen;
+  $('#cfgDesc').value = AppState.cfg.descuento;
+  $('#cfgIva').value = AppState.cfg.iva;
+  $('#cfgFactorH').value = AppState.cfg.factorH;
+}
+
+/* =========================================================
+   PRECIOS UI
+   ========================================================= */
+function cargarPreciosUI(){
+  const p = AppState.precios;
+  $('#prProveedor').value = p.proveedor;
+  $('#prFecha').value = p.fecha_actualizacion;
+  $('#prLongBarra').value = p.longitud_barra_m;
+  $('#prMerma').value = p.merma_default_pct;
+  $('#prPrecioKgBO').value = p.precio_kg_por_acabado.BO || 255;
+
+  const cont = $('#prMultiplos');
+  cont.innerHTML = Object.entries(p.mult_acabado_vs_BO).map(([k,v])=>`
+    <div style="display:flex; align-items:center; gap:10px; margin:8px 0;">
+      <span style="flex:1; font-size:11px; font-family:var(--font-mono); text-transform:uppercase;">${k.replace(/_/g,' ')}</span>
+      <input type="number" step="0.01" value="${v}" style="width:90px; padding:8px;"
+             onchange="actualizarMult('${k}', this.value)">
+    </div>
+  `).join('');
+
+  const c = p.calibracion;
+  $('#calEstado').textContent = c.estado === "completa" ? "✓ COMPLETA" : `${c.pasos.filter(x=>x.hecho).length}/${c.pasos.length} COMPLETADOS`;
+  $('#calLista').innerHTML = c.pasos.map(paso=>`
+    <div class="check-item">
+      <input type="checkbox" ${paso.hecho?'checked':''}
+             onchange="toggleCalibracion('${paso.id}')">
+      <div class="txt">
+        <b>${paso.desc}</b>
+        <small>${paso.hecho?'✓ VERIFICADO':'⏳ PENDIENTE'}</small>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function guardarPrecios(){
+  const p = AppState.precios;
+  p.proveedor = $('#prProveedor').value;
+  p.fecha_actualizacion = $('#prFecha').value;
+  p.longitud_barra_m = parseFloat($('#prLongBarra').value)||6.10;
+  p.merma_default_pct = parseFloat($('#prMerma').value)||5;
+  p.precio_kg_por_acabado.BO = parseFloat($('#prPrecioKgBO').value)||255;
+  await idbPut('config',{k:'precios', ...p});
+  toast("Precios guardados ✓");
+}
+
+async function actualizarMult(acabado, valor){
+  const v = parseFloat(valor);
+  AppState.precios.mult_acabado_vs_BO[acabado] = v;
+  const base = AppState.precios.precio_kg_por_acabado.BO;
+  AppState.precios.precio_kg_por_acabado[acabado] = base * v;
+  await idbPut('config',{k:'precios', ...AppState.precios});
+}
+
+async function toggleCalibracion(id){
+  const p = AppState.precios.calibracion.pasos.find(x=>x.id===id);
+  if(!p) return;
+  p.hecho = !p.hecho;
+  const todos = AppState.precios.calibracion.pasos.every(x=>x.hecho);
+  AppState.precios.calibracion.estado = todos ? "completa" : "pendiente";
+  await idbPut('config',{k:'precios', ...AppState.precios});
+  cargarPreciosUI();
+  toast(p.hecho ? "✓ Paso completado" : "Marcado como pendiente");
+}
+
+function verTablaPerfiles(){
+  const kg = AppState.precios.kg_m_por_perfil;
+  const filas = Object.entries(DB.perfiles).map(([cod,info])=>{
+    const kgm = kg[cod] || info.p;
+    const precioBarra = kgm * AppState.precios.longitud_barra_m * AppState.precios.precio_kg_por_acabado.BO *
+                        (1 + AppState.precios.merma_default_pct/100);
+    return `<tr>
+      <td><b>${cod}</b></td>
+      <td>${info.n}</td>
+      <td>${kgm.toFixed(3)}</td>
+      <td style="text-align:right;">$${precioBarra.toFixed(2)}</td>
+    </tr>`;
+  }).join('');
+
+  abrirModal(`
+    <h3>▸ TABLA DE PERFILES</h3>
+    <p style="font-size:10px; color:var(--ink-muted); font-family:var(--font-mono); text-transform:uppercase; letter-spacing:1px;">
+      BARRA ${AppState.precios.longitud_barra_m} M · BO $${AppState.precios.precio_kg_por_acabado.BO}/KG · MERMA ${AppState.precios.merma_default_pct}%
+    </p>
+    <table style="margin-top:12px;">
+      <thead><tr><th>CÓDIGO</th><th>PERFIL</th><th>KG/M</th><th style="text-align:right;">$/BARRA</th></tr></thead>
+      <tbody>${filas}</tbody>
+    </table>
+    <button class="btn ghost" style="margin-top:16px;" onclick="cerrarModal()">CERRAR</button>
+  `);
+}
+
+function verTablaHerrajes(){
+  const h = AppState.precios.herrajes_por_codigo;
+  const filas = Object.entries(h)
+    .sort((a,b)=>(b[1].rango[0]+b[1].rango[1]) - (a[1].rango[0]+a[1].rango[1]))
+    .map(([cod,info])=>{
+      const [mn,mx] = info.rango;
+      const pm = (mn+mx)/2;
+      const pv = pm * (1 + info.margen/100);
+      return `<tr>
+        <td><b>${cod}</b></td>
+        <td>${info.nom}</td>
+        <td style="text-align:right;">$${mn}-${mx}</td>
+        <td style="text-align:right;">$${pv.toFixed(0)}</td>
+        <td><span class="tag ${info.criticidad}">${info.criticidad.substring(0,3)}</span></td>
+      </tr>`;
+    }).join('');
+
+  abrirModal(`
+    <h3>▸ TABLA DE HERRAJES</h3>
+    <table style="margin-top:12px;">
+      <thead><tr><th>CÓDIGO</th><th>PIEZA</th><th>COSTO</th><th>VENTA</th><th>PRIO</th></tr></thead>
+      <tbody>${filas}</tbody>
+    </table>
+    <button class="btn ghost" style="margin-top:16px;" onclick="cerrarModal()">CERRAR</button>
+  `);
+}
+
+function verTablaVidrio(){
+  const v = AppState.precios.vidrio_por_especificacion;
+  const filas = Object.entries(v).map(([k,info])=>{
+    let rango;
+    if(info.base){
+      const base = v[info.base];
+      rango = [
+        base.rango_m2[0]*(1+info.incremento_pct[0]/100),
+        base.rango_m2[1]*(1+info.incremento_pct[1]/100)
+      ];
+    } else {
+      rango = info.rango_m2;
+    }
+    return `<tr>
+      <td><b>${info.nom}</b></td>
+      <td style="text-align:right;">$${rango[0].toFixed(0)}–${rango[1].toFixed(0)}</td>
+    </tr>`;
+  }).join('');
+
+  const serv = Object.entries(AppState.precios.servicios).map(([k,info])=>`
+    <tr><td><b>${k.replace(/_/g,' ')}</b></td>
+        <td style="text-align:right;">$${info.rango[0]}–${info.rango[1]} / ${info.unidad}</td></tr>
+  `).join('');
+
+  abrirModal(`
+    <h3>▸ TABLA DE VIDRIO</h3>
+    <table style="margin-top:12px;">
+      <thead><tr><th>ESPECIFICACIÓN</th><th style="text-align:right;">PRECIO/M²</th></tr></thead>
+      <tbody>${filas}</tbody>
+    </table>
+    <h4>SERVICIOS</h4>
+    <table><tbody>${serv}</tbody></table>
+    <button class="btn ghost" style="margin-top:16px;" onclick="cerrarModal()">CERRAR</button>
+  `);
+}
+
+async function exportarPrecios(){
+  const blob = new Blob([JSON.stringify(AppState.precios,null,2)],{type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `forza_precios_${AppState.precios.fecha_actualizacion}.json`;
+  a.click();
+}
+
+async function importarPrecios(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  try{
+    const data = JSON.parse(await file.text());
+    AppState.precios = {...INITIAL_PRICES, ...data};
+    await idbPut('config',{k:'precios', ...AppState.precios});
+    cargarPreciosUI();
+    toast("Precios importados ✓");
+  }catch(err){
+    toast("Error al importar","err");
+  }
+  e.target.value='';
+}
+
+/* =========================================================
+   MOTOR DE CÁLCULO
+   ========================================================= */
+function evalFormula(f,H,W){
+  if(f==="H")return H;
+  if(f==="W")return W;
+  let m;
+  if(m=f.match(/^H-(\d+)$/)) return H-parseInt(m[1]);
+  if(m=f.match(/^W-(\d+)$/)) return W-parseInt(m[1]);
+  if(m=f.match(/^H\+(\d+)$/)) return H+parseInt(m[1]);
+  if(m=f.match(/^W\+(\d+)$/)) return W+parseInt(m[1]);
+  if(m=f.match(/^\(H([+-]\d+)\)\/(\d+)$/)) return (H+parseInt(m[1]))/parseInt(m[2]);
+  if(m=f.match(/^\(W([+-]\d+)\)\/(\d+)$/)) return (W+parseInt(m[1]))/parseInt(m[2]);
+  return 0;
+}
+
+function inferirHojas(id){
+  if(id.includes("6H"))return 6;
+  if(id.includes("5H"))return 5;
+  if(id.includes("4H")||id.includes("OXXO"))return 4;
+  if(id.includes("3H"))return 3;
+  if(id.includes("2H"))return 2;
+  return 1;
+}
+
+function normAcabado(a){
+  return (a||"BO").toString().toLowerCase()
+    .replace(/\s+/g,'_')
+    .normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+}
+
+function precioBarraPerfil(cod, acabado){
+  const ac = normAcabado(acabado);
+  const kgm = AppState.precios.kg_m_por_perfil[cod] || DB.perfiles[cod]?.p || 0.6;
+  const precioKg = AppState.precios.precio_kg_por_acabado[ac] ||
+                   AppState.precios.precio_kg_por_acabado.BO;
+  const merma = 1 + AppState.precios.merma_default_pct/100;
+  return kgm * AppState.precios.longitud_barra_m * precioKg * merma;
+}
+
+function precioMetroPerfil(cod, acabado){
+  return precioBarraPerfil(cod, acabado) / AppState.precios.longitud_barra_m;
+}
+
+function precioHerraje(cod){
+  const h = AppState.precios.herrajes_por_codigo[cod];
+  if(!h) return {costo:50, venta:75, fuente:"sin_dato"};
+  const [mn,mx] = h.rango;
+  const costo = (mn+mx)/2;
+  return {
+    costo,
+    venta: costo * (1 + (h.margen||40)/100),
+    fuente:"rango_referencia"
+  };
+}
+
+function precioVidrio(espec, area_m2){
+  const v = AppState.precios.vidrio_por_especificacion[espec];
+  if(!v) return {costo:0, venta:0};
+  let rango;
+  if(v.base){
+    const base = AppState.precios.vidrio_por_especificacion[v.base];
+    rango = [
+      base.rango_m2[0]*(1+v.incremento_pct[0]/100),
+      base.rango_m2[1]*(1+v.incremento_pct[1]/100)
+    ];
+  } else {
+    rango = v.rango_m2;
+  }
+  const pm = (rango[0]+rango[1])/2;
+  return {
+    costo: pm*area_m2,
+    venta: pm*area_m2 * (1 + AppState.cfg.margen/100),
+    pm
+  };
+}
+
+function calcularVano(serie, confId, H, W, qty, vidrio, acabado){
+  const cfg = DB.configs[serie][confId];
+  const perfiles = [];
+  let totalPerfilKg = 0;
+
+  cfg.cortes.forEach((c,i)=>{
+    const [cod,ang,cant,formula] = c;
+    const L = Math.round(evalFormula(formula,H,W));
+    const meta = DB.perfiles[cod] || {n:"?", p:1.2};
+    const kg = (L/1000)*cant*meta.p;
+    const precioM = precioMetroPerfil(cod, acabado);
+    totalPerfilKg += kg;
+    perfiles.push({
+      n:i+1, cod, nom:meta.n, ang, cant, L,
+      total:L*cant,
+      kg:kg.toFixed(3),
+      precioM,
+      subtotal: (L*cant/1000)*precioM
+    });
+  });
+
+  const herrajes = cfg.herraje.map(h=>{
+    const p = precioHerraje(h[0]);
+    return {
+      cod:h[0],
+      nom:AppState.precios.herrajes_por_codigo[h[0]]?.nom || h[0],
+      cant:h[1],
+      costo:p.costo,
+      venta:p.venta,
+      importe:p.venta * h[1] * AppState.cfg.factorH
+    };
+  });
+
+  const numHojas = inferirHojas(confId);
+  const areaTotal = (H/1000)*(W/1000);
+  const vidrioM2 = areaTotal;
+  const dens = vidrio.includes("dvh") ? 30 : 15;
+  const vidrioKg = vidrioM2*dens;
+
+  const vidrioPrecio = precioVidrio(vidrio, vidrioM2);
+
+  const costoPerfiles = perfiles.reduce((a,p)=>a+p.subtotal,0);
+  const costoHerrajes = herrajes.reduce((a,h)=>a+h.importe,0);
+  const costoVidrio = vidrioPrecio.venta;
+
+  const material = costoPerfiles + costoHerrajes + costoVidrio;
+  const pu = material * (1 + AppState.cfg.margen/100);
+
+  return {
+    perfiles, herrajes,
+    numHojas, vidrioM2, vidrioKg,
+    costoPerfiles, costoHerrajes, costoVidrio,
+    material, pu,
+    importe: pu*qty
+  };
+}
+
+/* =========================================================
+   NAVEGACIÓN
+   ========================================================= */
+function irA(view){
+  $$('.view').forEach(v=>v.classList.remove('active'));
+  const el = $('#view-'+view);
+  if(el) el.classList.add('active');
+  $$('nav.bottom button').forEach(b=>b.classList.toggle('active', b.dataset.view===view));
+  window.scrollTo(0,0);
+
+  const titulos = {
+    inicio:"Cuaderno técnico", proyectos:"OBRAS",
+    proyecto:"DETALLE PROYECTO", camara:"CÁMARA",
+    galeria:"GALERÍA", precios:"LISTA DE PRECIOS", menu:"AJUSTES"
+  };
+  const sub = (titulos[view]||'Cuaderno técnico').toUpperCase();
+  $('#hSubtitle').innerHTML = `${sub} · <span id="horaActual">--:--:--</span>`;
+
+  if(view==="proyectos") renderProyectos();
+  if(view==="galeria") renderGaleria();
+  if(view==="inicio") renderInicio();
+  if(view==="camara") cargarSelectorProyectos();
+  if(view==="precios") cargarPreciosUI();
+}
+
+$$('nav.bottom button').forEach(b=>{
+  b.onclick = () => irA(b.dataset.view);
+});
+
+function tickClock(){
+  const el = document.getElementById('horaActual');
+  if(el){
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2,'0');
+    const mm = String(now.getMinutes()).padStart(2,'0');
+    const ss = String(now.getSeconds()).padStart(2,'0');
+    el.textContent = `${hh}:${mm}:${ss}`;
+  }
+  const f = document.getElementById('stampFecha');
+  if(f){
+    const now = new Date();
+    f.textContent = `${String(now.getDate()).padStart(2,'0')}.${String(now.getMonth()+1).padStart(2,'0')}.${now.getFullYear()}`;
+  }
+}
+setInterval(tickClock, 1000);
+tickClock();
+
+/* =========================================================
+   INICIO
+   ========================================================= */
+async function renderInicio(){
+  const proys = await idbGetAll('proyectos');
+  const fotos = await idbGetAll('fotos');
+  let vanos=0, pend=0;
+  proys.forEach(p=>{
+    vanos += (p.vanos||[]).reduce((a,v)=>a+v.qty,0);
+    if(p.estado !== "Entregado") pend++;
+  });
+  $('#iniProy').textContent = proys.length;
+  $('#iniVanos').textContent = vanos;
+  $('#iniFotos').textContent = fotos.length;
+  $('#iniPend').textContent = pend;
+
+  const recientes = proys.slice(-3).reverse();
+  const cont = $('#iniRecientes');
+  if(recientes.length===0){
+    cont.innerHTML = `<div class="empty"><div class="icon">📭</div><p>SIN OBRAS AÚN</p></div>`;
+    return;
+  }
+  cont.innerHTML = recientes.map(p=>{
+    const vanos = (p.vanos||[]).reduce((a,v)=>a+v.qty,0);
+    const total = calcularTotalProyecto(p);
+    const cls = p.estado==='Entregado'?'entregado':p.estado==='Aprobado'?'aprobado':'cotizado';
+    return `<div class="item" onclick="abrirProyecto('${p.id}')">
+      <div class="thumb">🏗️</div>
+      <div class="info">
+        <b>${p.cliente || 'Sin nombre'}</b>
+        <small>${p.folio||'—'} · ${vanos} VANOS · $${total.toFixed(0)}</small>
+      </div>
+      <span class="tag ${cls}">${p.estado||'Cotizado'}</span>
+    </div>`;
+  }).join('');
+}
+
+/* =========================================================
+   PROYECTOS
+   ========================================================= */
+async function renderProyectos(){
+  const filtro = ($('#buscar').value||'').toLowerCase();
+  const proys = await idbGetAll('proyectos');
+  const lista = proys.filter(p=>
+    (p.cliente||'').toLowerCase().includes(filtro) ||
+    (p.obra||'').toLowerCase().includes(filtro) ||
+    (p.folio||'').toLowerCase().includes(filtro)
+  ).reverse();
+
+  const cont = $('#listaProyectos');
+  if(lista.length===0){
+    cont.innerHTML = `<div class="empty"><div class="icon">📭</div><p>SIN PROYECTOS</p></div>`;
+    return;
+  }
+  cont.innerHTML = lista.map(p=>{
+    const vanos = (p.vanos||[]).reduce((a,v)=>a+v.qty,0);
+    const total = calcularTotalProyecto(p);
+    const cls = p.estado==='Entregado'?'entregado':p.estado==='Aprobado'?'aprobado':'cotizado';
+    return `<div class="item" onclick="abrirProyecto('${p.id}')">
+      <div class="thumb">🏗️</div>
+      <div class="info">
+        <b>${p.cliente||'Sin nombre'}</b>
+        <small>${p.folio||'—'} · ${vanos} VANOS · $${total.toFixed(0)}</small>
+      </div>
+      <span class="tag ${cls}">${p.estado||'Cotizado'}</span>
+    </div>`;
+  }).join('');
+}
+
+async function nuevoProyecto(){
+  const id = 'pry_'+Date.now();
+  const nuevo = {
+    id, cliente:"", folio:"PRY-"+String(Date.now()).slice(-6),
+    obra:"", fecha:new Date().toISOString().slice(0,10),
+    notas:"", estado:"Cotizado", vanos:[]
+  };
+  await idbPut('proyectos',nuevo);
+  abrirProyecto(id);
+  toast("Proyecto creado");
+}
+
+async function abrirProyecto(id){
+  const p = await idbGet('proyectos',id);
+  if(!p){toast("No encontrado","err"); return;}
+  AppState.proyectoActual = p;
+
+  $('#pryHeaderCard').innerHTML = `
+    <h2>// ${p.folio}</h2>
+    <label>Cliente</label>
+    <input id="pryCli" value="${p.cliente||''}" onchange="guardarPry()">
+    <label>Obra</label>
+    <input id="pryObraIn" value="${p.obra||''}" onchange="guardarPry()">
+    <label>Folio</label>
+    <input id="pryFolioIn" value="${p.folio||''}" onchange="guardarPry()">
+    <label>Estado</label>
+    <select id="pryEstado" onchange="guardarPry()">
+      ${['Cotizado','Aprobado','En taller','Terminado','Entregado']
+        .map(e=>`<option ${p.estado===e?'selected':''}>${e}</option>`).join('')}
+    </select>
+    <label>Notas</label>
+    <textarea id="pryNotasIn" rows="2" onchange="guardarPry()">${p.notas||''}</textarea>
+    <div style="display:flex; gap:8px; margin-top:12px;">
+      <button class="btn ghost sm" style="flex:1;" onclick="document.getElementById('fileFoto').click()">📷 FOTO</button>
+      <button class="btn ghost sm" style="flex:1;" onclick="window.print()">🖨️ PDF</button>
+      <button class="btn danger sm" onclick="eliminarProyecto()">✕</button>
+    </div>
+  `;
+
+  poblarConfPry();
+  renderVanos();
+  irA('proyecto');
+}
+
+async function guardarPry(){
+  if(!AppState.proyectoActual) return;
+  const p = AppState.proyectoActual;
+  p.cliente = $('#pryCli')?.value || p.cliente;
+  p.obra = $('#pryObraIn')?.value || p.obra;
+  p.folio = $('#pryFolioIn')?.value || p.folio;
+  p.estado = $('#pryEstado')?.value || p.estado;
+  p.notas = $('#pryNotasIn')?.value || p.notas;
+  await idbPut('proyectos',p);
+}
+
+async function eliminarProyecto(){
+  if(!confirm("¿Eliminar este proyecto y sus fotos?")) return;
+  const id = AppState.proyectoActual.id;
+  const fotos = await idbGetAll('fotos');
+  for(const f of fotos){ if(f.proyectoId===id) await idbDel('fotos',f.id); }
+  await idbDel('proyectos',id);
+  toast("Proyecto eliminado","err");
+  irA('proyectos');
+}
+
+/* =========================================================
+   VANOS
+   ========================================================= */
+const prySerie = $('#prySerie'), pryConf = $('#pryConf');
+function poblarConfPry(){
+  pryConf.innerHTML='';
+  const s = DB.configs[prySerie.value];
+  Object.keys(s).forEach(k=>{
+    const o = document.createElement('option');
+    o.value=k; o.textContent=s[k].nom;
+    pryConf.appendChild(o);
+  });
+}
+prySerie.onchange = poblarConfPry;
+poblarConfPry();
+
+async function agregarVano(){
+  const p = AppState.proyectoActual;
+  if(!p){toast("Abre un proyecto primero","err"); return;}
+
+  const serie = prySerie.value;
+  const confId = pryConf.value;
+  const H = parseFloat($('#pryH').value)||0;
+  const W = parseFloat($('#pryW').value)||0;
+  const qty = parseInt($('#pryQty').value)||1;
+  const zona = $('#pryZona').value;
+  const acabado = $('#pryAcabado').value;
+  const vidrio = $('#pryVidrio').value;
+  const ubic = $('#pryUbic').value.trim();
+
+  if(H<100 || W<100){toast("Medidas inválidas","err"); return;}
+
+  const calc = calcularVano(serie, confId, H, W, qty, vidrio, acabado);
+
+  p.vanos = p.vanos || [];
+  p.vanos.push({
+    id:'v_'+Date.now(), ubic, serie, confId,
+    confNom: DB.configs[serie][confId].nom,
+    H, W, qty, zona, acabado, vidrio,
+    ...calc
+  });
+
+  await idbPut('proyectos',p);
+  AppState.proyectoActual = p;
+  $('#pryUbic').value='';
+  renderVanos();
+  toast("Vano agregado ✓");
+}
+
+async function borrarVano(id){
+  if(!confirm("¿Eliminar este vano?")) return;
+  const p = AppState.proyectoActual;
+  p.vanos = p.vanos.filter(v=>v.id!==id);
+  await idbPut('proyectos',p);
+  AppState.proyectoActual = p;
+  renderVanos();
+  toast("Vano eliminado","err");
+}
+
+function renderVanos(){
+  const p = AppState.proyectoActual;
+  if(!p) return;
+  const cont = $('#listaVanos');
+
+  if(!p.vanos || p.vanos.length===0){
+    cont.innerHTML = `<div class="empty"><div class="icon">📐</div><p>SIN VANOS</p></div>`;
+    $('#pryTotales').innerHTML = '';
+    return;
+  }
+
+  cont.innerHTML = p.vanos.map((v,i)=>`
+    <div class="item" style="align-items:flex-start;">
+      <div class="thumb">🪟</div>
+      <div class="info">
+        <b>${v.ubic || v.confNom}</b>
+        <small>${v.serie} · ${v.H}×${v.W} · ${v.qty} PZA · ${v.acabado}</small>
+        <small style="color:var(--blue); font-weight:700;">$${v.importe.toFixed(2)}</small>
+      </div>
+      <div class="actions">
+        <button onclick="event.stopPropagation(); verDespiece(${i})">🔧</button>
+        <button onclick="event.stopPropagation(); borrarVano('${v.id}')">✕</button>
+      </div>
+    </div>
+  `).join('');
+
+  const subtotal = p.vanos.reduce((a,v)=>a+v.importe,0);
+  const descM = subtotal*(AppState.cfg.descuento/100);
+  const base = subtotal - descM;
+  const ivaM = base*(AppState.cfg.iva/100);
+  const total = base + ivaM;
+
+  $('#pryTotales').innerHTML = `
+    <div style="font-family:var(--font-mono); font-size:12px;">SUBTOTAL: <b>$${subtotal.toFixed(2)}</b></div>
+    ${AppState.cfg.descuento>0?`<div style="font-family:var(--font-mono); font-size:12px;">DESC ${AppState.cfg.descuento}%: <b>-$${descM.toFixed(2)}</b></div>`:''}
+    ${AppState.cfg.iva>0?`<div style="font-family:var(--font-mono); font-size:12px;">IVA ${AppState.cfg.iva}%: <b>$${ivaM.toFixed(2)}</b></div>`:''}
+    <div style="font-size:22px; color:var(--blue); margin-top:8px; font-family:var(--font-mono);">
+      TOTAL: <b>$${total.toFixed(2)}</b>
+    </div>
+  `;
+}
+
+function calcularTotalProyecto(p){
+  const subtotal = (p.vanos||[]).reduce((a,v)=>a+v.importe,0);
+  const base = subtotal*(1 - AppState.cfg.descuento/100);
+  return base*(1 + AppState.cfg.iva/100);
+}
+
+function verDespiece(idx){
+  const v = AppState.proyectoActual.vanos[idx];
+  const perfiles = v.perfiles.map(p=>`
+    <tr>
+      <td><b>${p.cod}</b><br><small style="opacity:.7;">${p.nom}</small></td>
+      <td style="text-align:center;">${p.ang}</td>
+      <td style="text-align:center;">${p.cant}</td>
+      <td style="text-align:right;">${p.L}</td>
+      <td style="text-align:right;">$${p.subtotal.toFixed(2)}</td>
+    </tr>`).join('');
+  const herrajes = v.herrajes.map(h=>`
+    <tr>
+      <td><b>${h.cod}</b><br><small style="opacity:.7;">${h.nom}</small></td>
+      <td style="text-align:center;">${h.cant}</td>
+      <td style="text-align:right;">$${h.importe.toFixed(2)}</td>
+    </tr>`).join('');
+
+  abrirModal(`
+    <h3>▸ DESPIECE — ${v.confNom}</h3>
+    <p style="font-size:10px; color:var(--ink-muted); font-family:var(--font-mono); text-transform:uppercase; letter-spacing:1px;">
+      ${v.H} × ${v.W} MM · ${v.qty} PZA · ZONA ${v.zona} · ${v.acabado.toUpperCase()}
+    </p>
+
+    <h4>PERFILES</h4>
+    <table>
+      <thead><tr>
+        <th>PERFIL</th><th>CORTE</th><th>CANT</th>
+        <th style="text-align:right;">LARGO</th>
+        <th style="text-align:right;">SUBTOTAL</th>
+      </tr></thead>
+      <tbody>${perfiles}</tbody>
+    </table>
+
+    <h4>HERRAJES</h4>
+    <table>
+      <thead><tr><th>PIEZA</th><th>CANT</th><th style="text-align:right;">IMPORTE</th></tr></thead>
+      <tbody>${herrajes}</tbody>
+    </table>
+
+    <h4>VIDRIO</h4>
+    <p style="font-size:12px; font-family:var(--font-mono);">
+      ${v.numHojas} HOJA(S) · ${v.vidrioM2.toFixed(3)} M² · ${v.vidrioKg.toFixed(1)} KG · $${v.costoVidrio.toFixed(2)}
+    </p>
+
+    <h4>RESUMEN</h4>
+    <p style="font-size:12px; line-height:1.8; font-family:var(--font-mono);">
+      PERFILES: <b>$${v.costoPerfiles.toFixed(2)}</b><br>
+      HERRAJES: <b>$${v.costoHerrajes.toFixed(2)}</b><br>
+      VIDRIO: <b>$${v.costoVidrio.toFixed(2)}</b><br>
+      ──────────────────<br>
+      MATERIAL: <b>$${v.material.toFixed(2)}</b><br>
+      P.U. MARGEN: <b style="color:var(--blue);">$${v.pu.toFixed(2)}</b><br>
+      TOTAL ${v.qty} PZA: <b style="font-size:15px; color:var(--blue);">$${v.importe.toFixed(2)}</b>
+    </p>
+
+    <button class="btn ghost" style="margin-top:16px;" onclick="cerrarModal()">CERRAR</button>
+  `);
+}
+
+/* =========================================================
+   CÁMARA
+   ========================================================= */
+async function cargarSelectorProyectos(){
+  const proys = await idbGetAll('proyectos');
+  const sel = $('#camProyecto');
+  sel.innerHTML = proys.length===0
+    ? `<option value="">— Sin proyectos —</option>`
+    : proys.map(p=>`<option value="${p.id}">${p.cliente||'Sin nombre'} · ${p.folio}</option>`).join('');
+}
+
+function abrirCamaraRapida(){
+  irA('camara');
+  setTimeout(()=>tomarFoto(), 300);
+}
+
+function tomarFoto(){
+  $('#fileFoto').click();
+}
+
+async function procesarFoto(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  e.target.value='';
+
+  const dataUrl = await comprimirImagen(file, 1280, 0.75);
+
+  AppState.fotosTemp.push({
+    dataUrl,
+    timestamp: new Date().toISOString(),
+    gps: AppState.gpsActual
+  });
+
+  renderFotosTemp();
+}
+
+function renderFotosTemp(){
+  const grid = $('#camGrid');
+  grid.innerHTML = AppState.fotosTemp.map((f,i)=>`
+    <div class="photo">
+      <img src="${f.dataUrl}">
+      ${f.gps?`<span class="photo-badge">📍</span>`:''}
+      <button class="del" onclick="borrarFotoTemp(${i})">✕</button>
+    </div>
+  `).join('') + `<button class="add" onclick="tomarFoto()">📷</button>`;
+}
+
+function borrarFotoTemp(i){
+  AppState.fotosTemp.splice(i,1);
+  renderFotosTemp();
+}
+
+async function guardarEvidencias(){
+  const proyectoId = $('#camProyecto').value;
+  if(!proyectoId){toast("Selecciona un proyecto","err"); return;}
+  if(AppState.fotosTemp.length===0){toast("No hay fotos","err"); return;}
+
+  const desc = $('#camDesc').value.trim();
+  const tipo = $('#camTipo').value;
+  const total = AppState.fotosTemp.length;
+
+  for(const f of AppState.fotosTemp){
+    await idbPut('fotos',{
+      id:'f_'+Date.now()+'_'+Math.random().toString(36).slice(2,7),
+      proyectoId, descripcion:desc, tipo,
+      timestamp:f.timestamp, gps:f.gps,
+      dataUrl:f.dataUrl
+    });
+  }
+
+  AppState.fotosTemp = [];
+  renderFotosTemp();
+  $('#camDesc').value='';
+  toast(`${total} evidencia(s) guardada(s) ✓`);
+}
+
+function comprimirImagen(file, maxSize, quality){
+  return new Promise((res)=>{
+    const reader = new FileReader();
+    reader.onload = e=>{
+      const img = new Image();
+      img.onload = ()=>{
+        const canvas = document.createElement('canvas');
+        let {width,height} = img;
+        if(width>height && width>maxSize){height*=maxSize/width; width=maxSize;}
+        else if(height>maxSize){width*=maxSize/height; height=maxSize;}
+        canvas.width=width; canvas.height=height;
+        canvas.getContext('2d').drawImage(img,0,0,width,height);
+        res(canvas.toDataURL('image/jpeg',quality));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function pedirGPS(){
+  if(!navigator.geolocation){
+    $('#gpsInfo').textContent = "GPS no disponible";
+    return;
+  }
+  $('#gpsInfo').className = "alert info";
+  $('#gpsInfo').textContent = "Obteniendo ubicación...";
+  navigator.geolocation.getCurrentPosition(
+    pos=>{
+      AppState.gpsActual = {
+        lat:pos.coords.latitude.toFixed(6),
+        lng:pos.coords.longitude.toFixed(6),
+        acc:Math.round(pos.coords.accuracy)+" m"
+      };
+      $('#gpsInfo').className = "alert ok";
+      $('#gpsInfo').innerHTML = `✓ Ubicación capturada<br>
+        <small>${AppState.gpsActual.lat}, ${AppState.gpsActual.lng} (±${AppState.gpsActual.acc})</small>`;
+    },
+    err=>{
+      $('#gpsInfo').className = "alert warn";
+      $('#gpsInfo').textContent = "⚠ Sin GPS: " + err.message;
+    },
+    {enableHighAccuracy:true, timeout:10000}
+  );
+}
+
+/* =========================================================
+   GALERÍA
+   ========================================================= */
+async function renderGaleria(){
+  const fotos = await idbGetAll('fotos');
+  const proys = await idbGetAll('proyectos');
+  const filtro = ($('#buscarFoto').value||'').toLowerCase();
+
+  const mapa = {};
+  proys.forEach(p=>mapa[p.id]=p);
+
+  const lista = fotos.filter(f=>{
+    const p = mapa[f.proyectoId];
+    return (f.descripcion||'').toLowerCase().includes(filtro) ||
+           (p?.cliente||'').toLowerCase().includes(filtro);
+  }).reverse();
+
+  const grid = $('#galeriaGrid');
+  if(lista.length===0){
+    grid.innerHTML = `<div style="grid-column:1/-1;" class="empty">
+      <div class="icon">🖼️</div><p>SIN FOTOS</p></div>`;
+    return;
+  }
+  grid.innerHTML = lista.map(f=>{
+    const p = mapa[f.proyectoId];
+    return `<div class="photo" onclick="verFoto('${f.id}')">
+      <img src="${f.dataUrl}">
+      <span class="photo-badge">${p?.folio||'?'}</span>
+    </div>`;
+  }).join('');
+}
+
+async function verFoto(id){
+  const f = await idbGet('fotos',id);
+  const p = await idbGet('proyectos',f.proyectoId);
+  abrirModal(`
+    <img src="${f.dataUrl}" style="width:100%; max-height:60vh; object-fit:contain; border-radius:8px;">
+    <h3 style="margin-top:14px;">${f.descripcion||'Sin descripción'}</h3>
+    <p style="font-size:11px; color:var(--ink-muted); line-height:1.6; font-family:var(--font-mono);">
+      ${p?.cliente||'?'} · ${p?.folio||'?'}<br>
+      TIPO: ${f.tipo.toUpperCase()} · ${new Date(f.timestamp).toLocaleString('es-MX')}
+      ${f.gps?`<br>📍 ${f.gps.lat}, ${f.gps.lng} (±${f.gps.acc})`:''}
+    </p>
+    <button class="btn danger" style="margin-top:16px;" onclick="borrarFoto('${f.id}')">✕ ELIMINAR</button>
+    <button class="btn ghost" onclick="cerrarModal()">CERRAR</button>
+  `);
+}
+
+async function borrarFoto(id){
+  if(!confirm("¿Eliminar esta foto?")) return;
+  await idbDel('fotos',id);
+  cerrarModal();
+  renderGaleria();
+  toast("Foto eliminada","err");
+}
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+function abrirModal(html){
+  $('#modalContent').innerHTML = html;
+  $('#modalBg').classList.add('show');
+}
+function cerrarModal(){
+  $('#modalBg').classList.remove('show');
+}
+
+/* =========================================================
+   IMPORT / EXPORT
+   ========================================================= */
+async function exportarTodo(){
+  const data = {
+    version:2,
+    fecha:new Date().toISOString(),
+    marca: AppState.marca,
+    cfg: AppState.cfg,
+    precios: AppState.precios,
+    proyectos: await idbGetAll('proyectos'),
+    fotos: await idbGetAll('fotos')
+  };
+  const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `forza_backup_${Date.now()}.json`;
+  a.click();
+  toast("Backup exportado ✓");
+}
+
+async function procesarImport(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  try{
+    const data = JSON.parse(await file.text());
+    if(data.proyectos) for(const p of data.proyectos) await idbPut('proyectos',p);
+    if(data.fotos) for(const f of data.fotos) await idbPut('fotos',f);
+    if(data.precios) await idbPut('config',{k:'precios', ...data.precios});
+    if(data.marca) await idbPut('config',{k:'marca', ...data.marca});
+    if(data.cfg) await idbPut('config',{k:'cfg', ...data.cfg});
+    toast("Datos importados ✓");
+    await cargarEstado();
+    renderInicio();
+  }catch(err){
+    toast("Error al importar","err");
+  }
+  e.target.value='';
+}
+
+async function borrarTodo(){
+  if(!confirm("⚠ ESTO BORRA TODO. ¿Continuar?")) return;
+  if(!confirm("¿Estás completamente seguro?")) return;
+  const d = await abrirDB();
+  d.transaction('proyectos','readwrite').objectStore('proyectos').clear();
+  d.transaction('fotos','readwrite').objectStore('fotos').clear();
+  d.transaction('config','readwrite').objectStore('config').clear();
+  toast("Todo borrado","err");
+  setTimeout(()=>location.reload(),800);
+}
+
+/* =========================================================
+   INIT
+   ========================================================= */
+(async function init(){
+  await cargarEstado();
+  await renderInicio();
+  pedirGPS();
+
+  let lastTap=0;
+  document.addEventListener('touchend',e=>{
+    const now=Date.now();
+    if(now-lastTap<300) e.preventDefault();
+    lastTap=now;
+  },{passive:false});
+})();
+</script>
+</body>
+</html>
