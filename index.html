@@ -3,310 +3,162 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#1e5fa8">
+<meta name="theme-color" content="#0f172a">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>FORZA Taller</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 /* =========================================================
-   FORZA TALLER — TEMA CUADERNO TÉCNICO (persistente)
+   VARIABLES DE MARCA (personalizables desde el menú)
    ========================================================= */
 :root{
-  --paper:#fafaf6;
-  --paper-grid:#e8ecef;
-  --paper-grid-strong:#d4dae0;
-  --paper-margin:#f0d5d5;
-  --paper-card:#ffffff;
-
-  --ink:#1a2332;
-  --ink-soft:#4a5568;
-  --ink-muted:#8892a0;
-  --ink-line:#cbd5e0;
-  --ink-line-strong:#2d3748;
-
-  --blue:#1e5fa8;
-  --blue-dark:#164a82;
-  --blue-light:#dbeafe;
-  --blue-accent:#3b82f6;
-
-  --ok:#15803d;   --ok-bg:#dcfce7;
-  --warn:#a16207; --warn-bg:#fef3c7;
-  --err:#b91c1c;  --err-bg:#fee2e2;
-  --info:#1e40af; --info-bg:#dbeafe;
-
-  --font-sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-  --font-mono:'JetBrains Mono','SF Mono',Monaco,Consolas,monospace;
-  --font-hand:'Caveat','Bradley Hand',cursive;
-
+  --brand-primary:#38bdf8;
+  --brand-secondary:#0ea5e9;
+  --brand-accent:#22c55e;
+  --brand-bg:#0f172a;
+  --brand-panel:#1e293b;
+  --brand-panel2:#334155;
+  --brand-line:#475569;
+  --brand-text:#e2e8f0;
+  --brand-muted:#94a3b8;
+  --brand-logo:url(''); /* se llena dinámicamente */
+  --ok:#22c55e; --warn:#f59e0b; --err:#ef4444;
   --safe-b:env(safe-area-inset-bottom,0px);
   --safe-t:env(safe-area-inset-top,0px);
 }
 *{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent;}
 html,body{height:100%; overscroll-behavior:none;}
-
 body{
-  font-family:var(--font-sans);
-  background:var(--paper);
-  color:var(--ink);
-  font-size:15px; line-height:1.45;
-  padding-bottom:calc(72px + var(--safe-b));
-  position:relative;
-  min-height:100vh;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  background:var(--brand-bg); color:var(--brand-text);
+  font-size:15px; line-height:1.4;
+  padding-bottom:calc(70px + var(--safe-b));
 }
 
-/* ---------- FONDO CUADERNO (grid + margen) ---------- */
-body::before{
-  content:"";
-  position:fixed; inset:0;
-  background-image:
-    linear-gradient(var(--paper-grid) 1px, transparent 1px),
-    linear-gradient(90deg, var(--paper-grid) 1px, transparent 1px),
-    linear-gradient(var(--paper-grid-strong) 1px, transparent 1px),
-    linear-gradient(90deg, var(--paper-grid-strong) 1px, transparent 1px);
-  background-size:20px 20px, 20px 20px, 100px 100px, 100px 100px;
-  pointer-events:none;
-  z-index:0;
-  opacity:.8;
-}
-/* Margen rojo tipo cuaderno (solo en desktop/tablet) */
-@media(min-width:600px){
-  body::after{
-    content:"";
-    position:fixed; top:0; bottom:0; left:80px;
-    width:2px;
-    background:var(--paper-margin);
-    pointer-events:none;
-    z-index:0;
-  }
-}
-header, main, nav.bottom, .modal-bg{position:relative; z-index:1;}
-
-/* ---------- HEADER ---------- */
+/* ---------- HEADER CON LOGO ---------- */
 header{
   position:sticky; top:0; z-index:50;
-  background:var(--blue);
-  color:#fff;
-  padding:12px 14px; padding-top:calc(12px + var(--safe-t));
+  background:var(--brand-panel);
+  border-bottom:2px solid var(--brand-primary);
+  padding:10px 14px; padding-top:calc(10px + var(--safe-t));
   display:flex; align-items:center; gap:12px;
-  box-shadow:0 2px 8px rgba(30,95,168,.25);
-}
-header::after{
-  content:"";
-  position:absolute; left:0; right:0; bottom:0; height:3px;
-  background:repeating-linear-gradient(90deg,
-    var(--blue-accent) 0 8px,
-    transparent 8px 16px);
-  opacity:.6;
 }
 header .logo-box{
-  width:44px; height:44px;
-  background:#fff;
-  border:2px solid rgba(255,255,255,.4);
-  border-radius:8px;
+  width:42px; height:42px; border-radius:10px;
+  background:var(--brand-panel2);
   display:flex; align-items:center; justify-content:center;
   overflow:hidden; flex-shrink:0;
-  box-shadow:0 2px 4px rgba(0,0,0,.1);
+  border:1px solid var(--brand-line);
 }
-header .logo-box img{width:100%; height:100%; object-fit:contain; padding:3px;}
+header .logo-box img{
+  width:100%; height:100%; object-fit:contain;
+}
 header .logo-box .fallback{
-  font-family:var(--font-mono);
-  font-size:20px; color:var(--blue); font-weight:800;
+  font-size:20px; color:var(--brand-primary); font-weight:800;
 }
 header .titles{flex:1; min-width:0;}
 header h1{
-  font-family:var(--font-mono);
-  font-size:14px; font-weight:700; letter-spacing:.5px;
+  font-size:15px; font-weight:700; letter-spacing:.3px;
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-  text-transform:uppercase;
-  color:#fff;
 }
 header .subtitle{
-  font-family:var(--font-mono);
-  font-size:9px; color:rgba(255,255,255,.75);
-  text-transform:uppercase; letter-spacing:1.5px;
-  margin-top:2px;
+  font-size:10px; color:var(--brand-muted);
+  text-transform:uppercase; letter-spacing:1px;
 }
 header .icon-btn{
-  background:rgba(255,255,255,.15);
-  border:1px solid rgba(255,255,255,.3);
-  color:#fff;
-  width:38px; height:38px; font-size:15px;
-  border-radius:8px;
+  background:var(--brand-panel2); border:none; color:var(--brand-text);
+  width:38px; height:38px; border-radius:50%; font-size:16px;
   display:flex; align-items:center; justify-content:center;
   flex-shrink:0;
-  transition:all .15s;
 }
-header .icon-btn:active{
-  background:#fff;
-  color:var(--blue);
-}
+header .icon-btn:active{background:var(--brand-primary); color:#000;}
 
 /* ---------- BOTTOM NAV ---------- */
 nav.bottom{
   position:fixed; bottom:0; left:0; right:0; z-index:100;
-  background:var(--paper-card);
-  border-top:2px solid var(--blue);
+  background:var(--brand-panel); border-top:1px solid var(--brand-line);
   display:flex; padding-bottom:var(--safe-b);
-  box-shadow:0 -2px 12px rgba(0,0,0,.08);
+  box-shadow:0 -2px 12px rgba(0,0,0,.3);
 }
 nav.bottom button{
-  flex:1; background:none; border:none;
-  color:var(--ink-muted);
-  padding:9px 4px 7px;
-  font-size:9px; cursor:pointer;
-  font-family:var(--font-mono);
-  font-weight:600; letter-spacing:.5px;
-  text-transform:uppercase;
-  display:flex; flex-direction:column; align-items:center; gap:3px;
-  transition:color .15s;
-  position:relative;
+  flex:1; background:none; border:none; color:var(--brand-muted);
+  padding:8px 4px 6px; font-size:10px; cursor:pointer;
+  display:flex; flex-direction:column; align-items:center; gap:2px;
+  transition:color .15s; font-weight:600;
 }
-nav.bottom button span{font-size:19px; line-height:1;}
-nav.bottom button.active{color:var(--blue);}
-nav.bottom button.active::after{
-  content:"";
-  position:absolute; top:0; left:20%; right:20%; height:3px;
-  background:var(--blue);
-  border-radius:0 0 3px 3px;
-}
+nav.bottom button span{font-size:21px; line-height:1;}
+nav.bottom button.active{color:var(--brand-primary);}
+nav.bottom button.active span{transform:scale(1.1);}
 
 /* ---------- MAIN ---------- */
 main{padding:14px; max-width:760px; margin:0 auto;}
 .view{display:none;}
-.view.active{display:block; animation:fadeIn .18s;}
-@keyframes fadeIn{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);}}
+.view.active{display:block; animation:fadeIn .2s;}
+@keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
 
 /* ---------- TARJETAS ---------- */
 .card{
-  background:var(--paper-card);
-  border:1px solid var(--ink-line);
-  border-left:4px solid var(--blue);
-  border-radius:6px;
-  padding:16px; margin-bottom:14px;
-  position:relative;
-  box-shadow:0 1px 3px rgba(0,0,0,.04);
-}
-.card::after{
-  content:"";
-  position:absolute;
-  top:0; right:0;
-  width:24px; height:24px;
-  background:linear-gradient(225deg, var(--paper-grid) 50%, transparent 50%);
-  border-left:1px solid var(--ink-line);
-  border-bottom:1px solid var(--ink-line);
-  pointer-events:none;
-  opacity:.7;
+  background:var(--brand-panel); border:1px solid var(--brand-line);
+  border-radius:14px; padding:16px; margin-bottom:14px;
 }
 .card h2{
-  font-family:var(--font-mono);
-  font-size:11px; text-transform:uppercase; letter-spacing:1.5px;
-  color:var(--blue); margin-bottom:14px; font-weight:700;
+  font-size:12px; text-transform:uppercase; letter-spacing:1px;
+  color:var(--brand-primary); margin-bottom:12px; font-weight:700;
   display:flex; align-items:center; gap:8px;
-  padding-bottom:10px;
-  border-bottom:2px dashed var(--ink-line);
+  border-bottom:1px solid var(--brand-line); padding-bottom:8px;
 }
-.card h3{
-  font-family:var(--font-mono);
-  font-size:11px; color:var(--ink-soft); margin:16px 0 8px;
-  font-weight:600; text-transform:uppercase; letter-spacing:1px;
-}
+.card h3{font-size:13px; color:var(--brand-muted); margin:14px 0 8px; font-weight:600;}
 
-/* ---------- FORM ---------- */
+/* ---------- FORMULARIO ---------- */
 label{
-  display:block;
-  font-family:var(--font-mono);
-  font-size:10px; color:var(--ink-soft);
+  display:block; font-size:12px; color:var(--brand-muted);
   margin:12px 0 6px; font-weight:600;
-  text-transform:uppercase; letter-spacing:1px;
 }
 input,select,textarea{
-  width:100%; padding:12px;
-  background:#fff;
-  border:1px solid var(--ink-line);
-  color:var(--ink);
-  font-size:15px; font-family:var(--font-mono);
-  border-radius:6px;
-  transition:all .15s;
+  width:100%; padding:13px 12px; background:var(--brand-panel2);
+  border:1px solid var(--brand-line); color:var(--brand-text);
+  border-radius:10px; font-size:16px; font-family:inherit;
 }
 input:focus,select:focus,textarea:focus{
-  outline:none;
-  border-color:var(--blue);
-  box-shadow:0 0 0 3px var(--blue-light);
+  outline:none; border-color:var(--brand-primary);
 }
 input[type=color]{padding:4px; height:44px;}
-textarea{font-family:var(--font-sans);}
 .row{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
 
 .btn{
-  background:var(--blue); color:#fff;
-  border:none; padding:14px; font-weight:700;
-  font-size:13px; cursor:pointer; margin-top:12px; width:100%;
-  font-family:var(--font-mono);
-  text-transform:uppercase; letter-spacing:1px;
+  background:var(--brand-primary); color:#001; border:none;
+  padding:15px; border-radius:12px; font-weight:700;
+  font-size:15px; cursor:pointer; margin-top:12px; width:100%;
   display:flex; align-items:center; justify-content:center; gap:8px;
-  border-radius:8px;
-  transition:all .15s;
-  box-shadow:0 2px 6px rgba(30,95,168,.25);
+  transition:transform .1s; font-family:inherit;
 }
-.btn:active{
-  transform:translateY(1px);
-  box-shadow:0 1px 2px rgba(30,95,168,.25);
-  background:var(--blue-dark);
-}
-.btn.ghost{
-  background:#fff; color:var(--blue);
-  border:2px solid var(--blue);
-  box-shadow:none;
-}
-.btn.ghost:active{background:var(--blue-light);}
-.btn.danger{background:var(--err); color:#fff; box-shadow:0 2px 6px rgba(185,28,28,.25);}
-.btn.ok{background:var(--ok); color:#fff; box-shadow:0 2px 6px rgba(21,128,61,.25);}
-.btn.sm{padding:10px 14px; font-size:11px; width:auto; margin:0;}
+.btn:active{transform:scale(.97);}
+.btn.ghost{background:transparent; color:var(--brand-primary); border:2px solid var(--brand-primary);}
+.btn.danger{background:var(--err); color:#fff;}
+.btn.ok{background:var(--ok); color:#001;}
+.btn.sm{padding:10px 14px; font-size:13px; width:auto; margin:0;}
 
 /* ---------- LISTAS ---------- */
 .item-list{display:flex; flex-direction:column; gap:10px;}
 .item{
-  background:#fff;
-  border:1px solid var(--ink-line);
-  border-left:3px solid var(--blue);
-  border-radius:6px;
-  padding:12px;
+  background:var(--brand-panel2); border-radius:12px; padding:12px;
   display:flex; gap:12px; align-items:center;
-  cursor:pointer;
-  transition:all .15s;
-  box-shadow:0 1px 2px rgba(0,0,0,.04);
+  cursor:pointer; transition:background .1s;
 }
-.item:active{
-  background:var(--blue-light);
-  border-color:var(--blue);
-}
+.item:active{background:#3e4f66;}
 .item .thumb{
-  width:58px; height:58px;
-  background:var(--paper-grid);
-  border:1px solid var(--ink-line);
-  border-radius:6px;
-  flex-shrink:0;
+  width:60px; height:60px; border-radius:10px; object-fit:cover;
+  background:var(--brand-bg); flex-shrink:0;
   display:flex; align-items:center; justify-content:center;
-  font-size:22px; overflow:hidden;
+  font-size:24px;
 }
-.item .thumb img{width:100%; height:100%; object-fit:cover;}
 .item .info{flex:1; min-width:0;}
-.item .info b{
-  display:block; font-size:14px; margin-bottom:3px;
-  font-weight:600; color:var(--ink);
-}
-.item .info small{
-  color:var(--ink-muted); font-size:10px;
-  display:block;
-  font-family:var(--font-mono);
-  letter-spacing:.3px;
-}
+.item .info b{display:block; font-size:14px; margin-bottom:2px;}
+.item .info small{color:var(--brand-muted); font-size:11px; display:block;}
 .item .actions{display:flex; flex-direction:column; gap:4px;}
 .item .actions button{
-  background:none; border:none; color:var(--ink-muted);
-  font-size:15px; padding:4px 8px;
+  background:none; border:none; color:var(--brand-muted);
+  font-size:16px; padding:4px 8px;
 }
 
 /* ---------- KPI ---------- */
@@ -315,125 +167,65 @@ textarea{font-family:var(--font-sans);}
   margin-bottom:14px;
 }
 .kpi > div{
-  background:#fff;
-  border:1px solid var(--ink-line);
-  border-top:3px solid var(--blue);
-  border-radius:6px;
-  padding:14px 12px;
-  position:relative;
-  box-shadow:0 1px 3px rgba(0,0,0,.04);
+  background:var(--brand-panel); border:1px solid var(--brand-line);
+  border-radius:12px; padding:12px;
 }
-.kpi span{
-  display:block;
-  font-family:var(--font-mono);
-  font-size:9px; color:var(--ink-muted);
-  text-transform:uppercase; letter-spacing:1.5px;
-  margin-bottom:6px;
-}
-.kpi b{
-  font-family:var(--font-mono);
-  font-size:22px; color:var(--blue);
-  font-weight:700;
-  letter-spacing:-.5px;
-}
+.kpi span{display:block; font-size:10px; color:var(--brand-muted);
+          text-transform:uppercase; letter-spacing:.5px; margin-bottom:4px;}
+.kpi b{font-size:18px; color:var(--brand-primary);}
 
 /* ---------- TAGS ---------- */
 .tag{
-  display:inline-block;
-  padding:3px 9px;
-  font-family:var(--font-mono);
-  font-size:9px; font-weight:700;
-  text-transform:uppercase; letter-spacing:1px;
-  border-radius:20px;
-  border:1px solid;
+  display:inline-block; padding:3px 10px; border-radius:12px;
+  font-size:10px; font-weight:700; text-transform:uppercase;
+  letter-spacing:.5px;
 }
-.tag.cotizado{color:#1e40af; border-color:#93c5fd; background:var(--info-bg);}
-.tag.aprobado{color:#15803d; border-color:#86efac; background:var(--ok-bg);}
-.tag.taller{color:#a16207; border-color:#fde047; background:var(--warn-bg);}
-.tag.terminado{color:#15803d; border-color:#86efac; background:var(--ok-bg);}
-.tag.entregado{color:var(--ink-muted); border-color:var(--ink-line); background:var(--paper-grid);}
-.tag.maxima{color:#b91c1c; border-color:#fca5a5; background:var(--err-bg);}
-.tag.alta{color:#a16207; border-color:#fde047; background:var(--warn-bg);}
-.tag.media{color:#a16207; border-color:#fcd34d; background:#fefce8;}
-.tag.baja{color:#15803d; border-color:#86efac; background:var(--ok-bg);}
-.tag.verificado{color:#15803d; border-color:#86efac; background:var(--ok-bg);}
-.tag.estimado{color:#a16207; border-color:#fde047; background:var(--warn-bg);}
+.tag.cotizado{background:#1e40af; color:#dbeafe;}
+.tag.aprobado{background:#166534; color:#dcfce7;}
+.tag.taller{background:#9a3412; color:#fed7aa;}
+.tag.terminado{background:#166534; color:#dcfce7;}
+.tag.entregado{background:var(--brand-panel2); color:var(--brand-text);}
+.tag.maxima{background:#7f1d1d; color:#fecaca;}
+.tag.alta{background:#78350f; color:#fed7aa;}
+.tag.media{background:#713f12; color:#fde68a;}
+.tag.baja{background:#14532d; color:#bbf7d0;}
+.tag.verificado{background:#166534; color:#dcfce7;}
+.tag.estimado{background:#78350f; color:#fed7aa;}
 
 /* ---------- MODAL ---------- */
 .modal-bg{
-  position:fixed; inset:0;
-  background:rgba(26,35,50,.6);
-  backdrop-filter:blur(4px);
-  z-index:200;
+  position:fixed; inset:0; background:rgba(0,0,0,.75); z-index:200;
   display:none; align-items:flex-end;
 }
 .modal-bg.show{display:flex;}
 .modal{
-  background:var(--paper-card);
-  width:100%;
-  border-top:4px solid var(--blue);
-  border-radius:16px 16px 0 0;
+  background:var(--brand-panel); width:100%; border-radius:20px 20px 0 0;
   padding:20px; padding-bottom:calc(20px + var(--safe-b));
   max-height:92vh; overflow-y:auto;
-  animation:slideUp .22s ease-out;
-  position:relative;
+  animation:slideUp .25s ease-out;
 }
 @keyframes slideUp{from{transform:translateY(100%);} to{transform:translateY(0);}}
-.modal::before{
-  content:"";
-  position:absolute;
-  top:8px; left:50%; transform:translateX(-50%);
-  width:40px; height:4px;
-  background:var(--ink-line);
-  border-radius:2px;
-}
-.modal h3{
-  font-family:var(--font-mono);
-  font-size:13px; color:var(--blue);
-  margin-bottom:14px;
-  text-transform:uppercase;
-  letter-spacing:1.5px;
-  padding-bottom:10px;
-  border-bottom:2px dashed var(--ink-line);
-}
-.modal h4{
-  font-family:var(--font-mono);
-  font-size:10px; color:var(--blue);
-  margin:16px 0 8px;
-  text-transform:uppercase;
-  letter-spacing:1.5px;
-}
+.modal h3{margin-bottom:16px; font-size:16px; color:var(--brand-primary);}
+.modal h4{font-size:13px; color:var(--brand-primary); margin:16px 0 8px;}
 .modal table{width:100%; border-collapse:collapse; font-size:12px;}
-.modal th{
-  background:var(--paper-grid);
-  padding:8px; text-align:left;
-  font-family:var(--font-mono);
-  font-size:9px; color:var(--ink-soft);
-  font-weight:600;
-  text-transform:uppercase; letter-spacing:1px;
-  border-bottom:1px solid var(--ink-line);
+.modal th{background:var(--brand-panel2); padding:8px; text-align:left;
+          font-size:11px; color:var(--brand-muted); font-weight:600;}
+.modal td{padding:8px; border-bottom:1px solid var(--brand-line);}
+.modal .close{
+  position:absolute; top:14px; right:14px; background:var(--brand-panel2);
+  border:none; color:var(--brand-text); width:32px; height:32px;
+  border-radius:50%; font-size:16px;
 }
-.modal td{
-  padding:8px; border-bottom:1px solid var(--paper-grid);
-  font-family:var(--font-mono);
-  font-size:11px;
-  color:var(--ink);
-}
-.modal td b{color:var(--blue);}
 
 /* ---------- ALERTAS ---------- */
 .alert{
-  padding:12px; font-size:12px;
-  margin:10px 0;
-  border-left:4px solid;
-  border-radius:6px;
-  font-family:var(--font-mono);
-  line-height:1.5;
+  padding:12px; border-radius:10px; font-size:13px;
+  margin:10px 0; border-left:4px solid;
 }
-.alert.warn{background:var(--warn-bg); border-color:var(--warn); color:#78350f;}
-.alert.ok{background:var(--ok-bg); border-color:var(--ok); color:#14532d;}
-.alert.info{background:var(--info-bg); border-color:var(--blue); color:#1e3a8a;}
-.alert.err{background:var(--err-bg); border-color:var(--err); color:#7f1d1d;}
+.alert.warn{background:#78350f; border-color:var(--warn);}
+.alert.ok{background:#14532d; border-color:var(--ok);}
+.alert.info{background:#1e3a8a; border-color:var(--brand-primary);}
+.alert.err{background:#7f1d1d; border-color:var(--err);}
 
 /* ---------- FOTOS ---------- */
 .photo-grid{
@@ -441,150 +233,86 @@ textarea{font-family:var(--font-sans);}
   margin-top:10px;
 }
 .photo-grid .photo{
-  aspect-ratio:1;
-  position:relative;
-  background:var(--paper-grid);
-  border:1px solid var(--ink-line);
-  border-radius:8px;
-  overflow:hidden;
+  aspect-ratio:1; border-radius:10px; overflow:hidden;
+  position:relative; background:var(--brand-bg);
 }
 .photo-grid .photo img{width:100%; height:100%; object-fit:cover;}
 .photo-grid .photo .del{
   position:absolute; top:4px; right:4px;
-  background:var(--err); color:#fff;
-  border:none; width:24px; height:24px;
-  border-radius:50%;
+  background:rgba(239,68,68,.9); color:#fff;
+  border:none; width:24px; height:24px; border-radius:50%;
   font-size:12px; line-height:1;
-  box-shadow:0 2px 4px rgba(0,0,0,.2);
 }
 .photo-grid .add{
-  aspect-ratio:1;
-  border:2px dashed var(--ink-line);
-  background:#fff;
-  color:var(--blue); font-size:22px;
-  border-radius:8px;
+  aspect-ratio:1; border:2px dashed var(--brand-line); border-radius:10px;
+  background:none; color:var(--brand-muted); font-size:24px;
   display:flex; align-items:center; justify-content:center;
-  transition:all .15s;
 }
-.photo-grid .add:active{background:var(--blue-light); border-color:var(--blue);}
 .photo-grid .photo .photo-badge{
   position:absolute; bottom:4px; left:4px;
-  background:var(--blue); color:#fff;
-  font-family:var(--font-mono);
-  font-size:8px; padding:2px 6px;
-  border-radius:8px;
-  letter-spacing:.5px;
+  background:rgba(0,0,0,.7); color:#fff;
+  font-size:9px; padding:2px 6px; border-radius:8px;
 }
 
 /* ---------- LOGO UPLOADER ---------- */
 .logo-uploader{
   display:flex; gap:14px; align-items:center;
-  padding:14px;
-  background:var(--paper-grid);
-  border:1px solid var(--ink-line);
-  border-radius:8px;
+  padding:14px; background:var(--brand-panel2); border-radius:12px;
 }
 .logo-uploader .preview{
-  width:70px; height:70px;
-  background:#fff;
-  border:2px dashed var(--ink-line);
-  border-radius:8px;
+  width:70px; height:70px; border-radius:12px;
+  background:var(--brand-bg); border:2px dashed var(--brand-line);
   display:flex; align-items:center; justify-content:center;
   overflow:hidden; flex-shrink:0;
 }
-.logo-uploader .preview img{width:100%; height:100%; object-fit:contain; padding:4px;}
-.logo-uploader .info{flex:1; font-size:11px; color:var(--ink-soft); font-family:var(--font-mono); line-height:1.5;}
+.logo-uploader .preview img{width:100%; height:100%; object-fit:contain;}
+.logo-uploader .info{flex:1; font-size:12px; color:var(--brand-muted);}
 
-/* ---------- CHECK ---------- */
+/* ---------- CHECKBOX ---------- */
 .check-item{
-  display:flex; gap:10px; align-items:center;
-  padding:12px;
-  background:#fff;
-  border:1px solid var(--ink-line);
-  border-radius:8px;
-  margin:8px 0;
+  display:flex; gap:10px; align-items:center; padding:12px;
+  background:var(--brand-panel2); border-radius:10px; margin:8px 0;
 }
 .check-item input[type=checkbox]{
   width:22px; height:22px; flex-shrink:0;
-  accent-color:var(--blue);
+  accent-color:var(--brand-primary);
 }
 .check-item .txt{flex:1;}
-.check-item .txt b{
-  font-family:var(--font-mono);
-  font-size:11px; display:block;
-  letter-spacing:.3px;
-  color:var(--ink);
-}
-.check-item .txt small{
-  font-family:var(--font-mono);
-  font-size:9px; color:var(--ink-muted);
-  letter-spacing:1px; text-transform:uppercase;
-}
+.check-item .txt b{font-size:13px; display:block;}
+.check-item .txt small{font-size:11px; color:var(--brand-muted);}
 
 /* ---------- EMPTY ---------- */
-.empty{text-align:center; padding:40px 20px; color:var(--ink-muted);}
-.empty .icon{font-size:44px; margin-bottom:12px; opacity:.4;}
-.empty p{
-  font-family:var(--font-mono);
-  font-size:11px; text-transform:uppercase;
-  letter-spacing:1.5px;
+.empty{
+  text-align:center; padding:40px 20px; color:var(--brand-muted);
 }
+.empty .icon{font-size:48px; margin-bottom:10px; opacity:.4;}
+.empty p{font-size:13px;}
 
 /* ---------- SEARCH ---------- */
 .search-box{position:relative; margin-bottom:12px;}
-.search-box input{padding-left:40px; background:#fff;}
+.search-box input{padding-left:40px;}
 .search-box::before{
-  content:"⌕";
-  position:absolute; left:14px; top:50%;
-  transform:translateY(-50%);
-  font-size:20px; color:var(--blue);
-  font-family:var(--font-mono);
+  content:"🔍"; position:absolute; left:14px; top:50%;
+  transform:translateY(-50%); font-size:15px; opacity:.6;
 }
 
 /* ---------- TOAST ---------- */
 #toast{
   position:fixed; bottom:90px; left:50%;
   transform:translateX(-50%) translateY(20px);
-  background:var(--ink); color:#fff;
-  padding:12px 20px;
-  font-family:var(--font-mono);
-  font-weight:700; font-size:12px;
-  text-transform:uppercase; letter-spacing:1px;
-  border-radius:24px;
-  opacity:0; transition:all .3s;
-  z-index:300; pointer-events:none;
+  background:var(--ok); color:#001; padding:12px 20px;
+  border-radius:24px; font-weight:700; font-size:14px;
+  opacity:0; transition:all .3s; z-index:300; pointer-events:none;
   max-width:90vw; text-align:center;
-  box-shadow:0 6px 20px rgba(0,0,0,.25);
 }
 #toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
 
-/* ---------- MISC ---------- */
-.stamp{
-  display:inline-block;
-  font-family:var(--font-mono);
-  font-size:9px;
-  color:var(--blue);
-  border:1.5px solid var(--blue);
-  padding:2px 6px;
-  border-radius:4px;
-  letter-spacing:1.5px;
-  text-transform:uppercase;
-}
-.hand-note{
-  font-family:var(--font-hand);
-  font-size:16px;
-  color:var(--blue);
-  transform:rotate(-1.5deg);
-  display:inline-block;
-}
-
+/* ---------- PRINT ---------- */
 @media print{
   header,nav.bottom,.no-print{display:none !important;}
   body{background:#fff; color:#000; padding:0;}
-  body::before,body::after{display:none;}
-  .card{border:1px solid #ccc; page-break-inside:avoid; box-shadow:none;}
-  .card::after{display:none;}
-  .card h2,.kpi b{color:#1e5fa8;}
+  .card{border:1px solid #ccc; page-break-inside:avoid;}
+  .card h2,.kpi b{color:#0369a1;}
 }
 </style>
 </head>
@@ -596,10 +324,10 @@ textarea{font-family:var(--font-sans);}
     <span class="fallback" id="headerLogoFallback">F</span>
   </div>
   <div class="titles">
-    <h1 id="hTitle">FORZA TALLER</h1>
-    <div class="subtitle" id="hSubtitle">CUADERNO TÉCNICO · <span id="horaActual">--:--:--</span></div>
+    <h1 id="hTitle">FORZA Taller</h1>
+    <div class="subtitle" id="hSubtitle">Utilidad de taller</div>
   </div>
-  <button class="icon-btn" onclick="abrirCamaraRapida()" title="Foto">📷</button>
+  <button class="icon-btn" onclick="abrirCamaraRapida()" title="Foto rápida">📷</button>
   <button class="icon-btn" onclick="irA('menu')" title="Menú">☰</button>
 </header>
 
@@ -608,34 +336,25 @@ textarea{font-family:var(--font-sans);}
 
   <!-- ---------- INICIO ---------- -->
   <section id="view-inicio" class="view active">
-
-    <div class="card" style="padding:10px 16px; border-left-color:var(--ok);">
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <span class="stamp">CUADERNO · TALLER</span>
-        <span class="stamp" id="stampFecha">--.--.----</span>
-      </div>
-    </div>
-
     <div class="kpi">
-      <div><span>PROYECTOS</span><b id="iniProy">0</b></div>
-      <div><span>VANOS</span><b id="iniVanos">0</b></div>
-      <div><span>FOTOS</span><b id="iniFotos">0</b></div>
-      <div><span>PENDIENTES</span><b id="iniPend">0</b></div>
+      <div><span>Proyectos</span><b id="iniProy">0</b></div>
+      <div><span>Vanos</span><b id="iniVanos">0</b></div>
+      <div><span>Fotos</span><b id="iniFotos">0</b></div>
+      <div><span>Por entregar</span><b id="iniPend">0</b></div>
     </div>
 
     <div class="card">
-      <h2>// ACCIONES RÁPIDAS</h2>
-      <button class="btn" onclick="nuevoProyecto()">+ NUEVO PROYECTO</button>
-      <button class="btn ghost" onclick="irA('proyectos')">▸ VER OBRAS</button>
-      <button class="btn ghost" onclick="irA('camara')">▸ TOMAR EVIDENCIA</button>
-      <button class="btn ghost" onclick="irA('precios')">▸ LISTA DE PRECIOS</button>
+      <h2>🚀 Acciones rápidas</h2>
+      <button class="btn" onclick="nuevoProyecto()">➕ Nuevo proyecto</button>
+      <button class="btn ghost" onclick="irA('proyectos')">📁 Ver proyectos</button>
+      <button class="btn ghost" onclick="irA('camara')">📷 Tomar evidencia</button>
+      <button class="btn ghost" onclick="irA('precios')">💵 Lista de precios</button>
     </div>
 
     <div class="card">
-      <h2>// ÚLTIMAS OBRAS</h2>
+      <h2>📌 Últimos proyectos</h2>
       <div id="iniRecientes" class="item-list"></div>
     </div>
-
   </section>
 
   <!-- ---------- PROYECTOS ---------- -->
@@ -644,7 +363,7 @@ textarea{font-family:var(--font-sans);}
       <input id="buscar" placeholder="Buscar cliente u obra..." oninput="renderProyectos()">
     </div>
     <div id="listaProyectos" class="item-list"></div>
-    <button class="btn" style="margin-top:14px;" onclick="nuevoProyecto()">+ NUEVO PROYECTO</button>
+    <button class="btn" style="margin-top:14px;" onclick="nuevoProyecto()">➕ Nuevo proyecto</button>
   </section>
 
   <!-- ---------- PROYECTO DETALLE ---------- -->
@@ -652,7 +371,7 @@ textarea{font-family:var(--font-sans);}
     <div class="card" id="pryHeaderCard"></div>
 
     <div class="card">
-      <h2>// AGREGAR VANO</h2>
+      <h2>➕ Agregar vano</h2>
 
       <label>Serie</label>
       <select id="prySerie">
@@ -702,11 +421,11 @@ textarea{font-family:var(--font-sans);}
       <label>Ubicación / Etiqueta</label>
       <input id="pryUbic" placeholder="Ej: Recámara 1, Fachada norte">
 
-      <button class="btn" onclick="agregarVano()">+ AGREGAR VANO</button>
+      <button class="btn" onclick="agregarVano()">➕ Agregar vano</button>
     </div>
 
     <div class="card">
-      <h2>// VANOS DEL PROYECTO</h2>
+      <h2>📊 Vanos del proyecto</h2>
       <div id="listaVanos" class="item-list"></div>
       <div id="pryTotales" style="margin-top:16px; text-align:right;"></div>
     </div>
@@ -715,7 +434,7 @@ textarea{font-family:var(--font-sans);}
   <!-- ---------- CÁMARA ---------- -->
   <section id="view-camara" class="view">
     <div class="card">
-      <h2>// NUEVA EVIDENCIA</h2>
+      <h2>📷 Nueva evidencia</h2>
 
       <label>Proyecto destino</label>
       <select id="camProyecto"></select>
@@ -736,13 +455,13 @@ textarea{font-family:var(--font-sans);}
         <button class="add" onclick="tomarFoto()">📷</button>
       </div>
 
-      <button class="btn ok" onclick="guardarEvidencias()">GUARDAR EVIDENCIAS</button>
+      <button class="btn ok" onclick="guardarEvidencias()">💾 Guardar</button>
     </div>
 
     <div class="card">
-      <h2>// UBICACIÓN GPS</h2>
+      <h2>📍 Ubicación GPS</h2>
       <div id="gpsInfo" class="alert info">Obteniendo...</div>
-      <button class="btn ghost sm" style="margin-top:10px; width:100%;" onclick="pedirGPS()">↻ ACTUALIZAR GPS</button>
+      <button class="btn ghost sm" style="margin-top:10px;" onclick="pedirGPS()">🔄 Actualizar GPS</button>
     </div>
   </section>
 
@@ -757,7 +476,7 @@ textarea{font-family:var(--font-sans);}
   <!-- ---------- PRECIOS ---------- -->
   <section id="view-precios" class="view">
     <div class="card">
-      <h2>// LISTA DE PRECIOS</h2>
+      <h2>💵 Lista de precios</h2>
 
       <label>Proveedor</label>
       <input id="prProveedor" onchange="guardarPrecios()">
@@ -777,28 +496,28 @@ textarea{font-family:var(--font-sans);}
       <div id="prMultiplos"></div>
 
       <button class="btn ghost sm" style="margin-top:14px; width:100%;" onclick="verTablaPerfiles()">
-        ▸ VER TABLA DE PERFILES
+        📊 Ver tabla de perfiles
       </button>
       <button class="btn ghost sm" style="width:100%;" onclick="verTablaHerrajes()">
-        ▸ VER TABLA DE HERRAJES
+        🔩 Ver tabla de herrajes
       </button>
       <button class="btn ghost sm" style="width:100%;" onclick="verTablaVidrio()">
-        ▸ VER TABLA DE VIDRIO
+        🪟 Ver tabla de vidrio
       </button>
     </div>
 
     <div class="card">
-      <h2>// CALIBRACIÓN</h2>
-      <p style="font-size:11px; color:var(--ink-muted); margin-bottom:12px; font-family:var(--font-mono);">
-        ESTADO: <b id="calEstado">—</b>
+      <h2>🎯 Calibración</h2>
+      <p style="font-size:12px; color:var(--brand-muted); margin-bottom:12px;">
+        Estado: <b id="calEstado">—</b>
       </p>
       <div id="calLista"></div>
     </div>
 
     <div class="card">
-      <h2>// IMPORT / EXPORT</h2>
-      <button class="btn ghost" onclick="exportarPrecios()">▲ EXPORTAR PRECIOS JSON</button>
-      <button class="btn ghost" onclick="document.getElementById('fileImportPrecios').click()">▼ IMPORTAR PRECIOS JSON</button>
+      <h2>📤 Import / Export</h2>
+      <button class="btn ghost" onclick="exportarPrecios()">📤 Exportar precios JSON</button>
+      <button class="btn ghost" onclick="document.getElementById('fileImportPrecios').click()">📥 Importar precios JSON</button>
       <input type="file" id="fileImportPrecios" accept=".json" style="display:none" onchange="importarPrecios(event)">
     </div>
   </section>
@@ -806,27 +525,28 @@ textarea{font-family:var(--font-sans);}
   <!-- ---------- MENÚ ---------- -->
   <section id="view-menu" class="view">
 
+    <!-- PERSONALIZACIÓN DE MARCA -->
     <div class="card">
-      <h2>// PERSONALIZACIÓN DEL TALLER</h2>
+      <h2>🎨 Personalización del taller</h2>
 
       <label>Nombre del taller</label>
       <input id="cfgNombre" placeholder="Ej: Canceles García" onchange="guardarMarca()">
 
       <label>Subtítulo</label>
-      <input id="cfgSubtitulo" placeholder="Ej: Cuaderno técnico" onchange="guardarMarca()">
+      <input id="cfgSubtitulo" placeholder="Ej: Aluminio y vidrio" onchange="guardarMarca()">
 
       <label>Logo</label>
       <div class="logo-uploader">
         <div class="preview" id="logoPreview">
-          <span style="font-size:26px; color:var(--ink-muted);">🖼️</span>
+          <span style="font-size:26px; color:var(--brand-muted);">🖼️</span>
         </div>
         <div class="info">
-          Sube el logo del taller (PNG/JPG).<br>
-          <button class="btn ghost sm" style="margin-top:10px; width:100%;" onclick="document.getElementById('fileLogo').click()">
-            ▸ ELEGIR IMAGEN
+          Sube el logo de tu taller (PNG/JPG, recomendado 200×200 px).<br>
+          <button class="btn ghost sm" style="margin-top:10px;" onclick="document.getElementById('fileLogo').click()">
+            📁 Elegir imagen
           </button>
-          <button class="btn ghost sm" style="margin-top:6px; width:100%;" onclick="borrarLogo()">
-            ✕ QUITAR LOGO
+          <button class="btn ghost sm" style="margin-top:6px;" onclick="borrarLogo()">
+            🗑️ Quitar logo
           </button>
         </div>
       </div>
@@ -835,54 +555,55 @@ textarea{font-family:var(--font-sans);}
       <h3>Colores de marca</h3>
       <div class="row">
         <div>
-          <label>Azul principal</label>
+          <label>Color primario</label>
           <input type="color" id="cfgColorPrimary" onchange="guardarMarca()">
         </div>
         <div>
-          <label>Papel (fondo)</label>
+          <label>Color fondo</label>
           <input type="color" id="cfgColorBg" onchange="guardarMarca()">
         </div>
       </div>
       <div class="row">
         <div>
-          <label>Tarjetas</label>
+          <label>Panel</label>
           <input type="color" id="cfgColorPanel" onchange="guardarMarca()">
         </div>
         <div>
-          <label>Grid</label>
+          <label>Panel secundario</label>
           <input type="color" id="cfgColorPanel2" onchange="guardarMarca()">
         </div>
       </div>
-      <button class="btn ghost sm" style="width:100%;" onclick="restaurarColores()">↻ RESTAURAR COLORES</button>
+      <button class="btn ghost sm" style="width:100%;" onclick="restaurarColores()">↩️ Restaurar colores default</button>
     </div>
 
+    <!-- PARÁMETROS DE CÁLCULO -->
     <div class="card">
-      <h2>// PARÁMETROS DE CÁLCULO</h2>
+      <h2>⚙️ Parámetros de cálculo</h2>
       <label>Margen de ganancia (%)</label>
       <input id="cfgMargen" type="number" value="35" onchange="guardarCfg()">
       <label>Descuento global (%)</label>
       <input id="cfgDesc" type="number" value="0" step="0.5" onchange="guardarCfg()">
       <label>IVA (%)</label>
       <input id="cfgIva" type="number" value="16" onchange="guardarCfg()">
-      <label>Factor herraje</label>
+      <label>Factor herraje (multiplicador)</label>
       <input id="cfgFactorH" type="number" value="1.0" step="0.05" onchange="guardarCfg()">
     </div>
 
+    <!-- DATOS -->
     <div class="card">
-      <h2>// DATOS</h2>
-      <button class="btn ghost" onclick="exportarTodo()">▲ EXPORTAR TODO (JSON)</button>
-      <button class="btn ghost" onclick="document.getElementById('fileImport').click()">▼ IMPORTAR JSON</button>
+      <h2>💾 Datos</h2>
+      <button class="btn ghost" onclick="exportarTodo()">📤 Exportar todo (JSON)</button>
+      <button class="btn ghost" onclick="document.getElementById('fileImport').click()">📥 Importar JSON</button>
       <input type="file" id="fileImport" accept=".json" style="display:none" onchange="procesarImport(event)">
-      <button class="btn danger" onclick="borrarTodo()">✕ BORRAR TODOS LOS DATOS</button>
+      <button class="btn danger" onclick="borrarTodo()">🗑️ Borrar todos los datos</button>
     </div>
 
     <div class="card">
-      <h2>// ACERCA DE</h2>
-      <p style="font-size:12px; color:var(--ink-soft); line-height:1.6;">
-        <b style="color:var(--blue);">FORZA TALLER</b> · v2.0<br>
-        Cuaderno técnico de taller.<br>
-        Datos locales (IndexedDB) · Funciona sin internet.<br>
-        <span class="hand-note">Hecho para trabajar con una mano.</span>
+      <h2>ℹ️ Acerca de</h2>
+      <p style="font-size:13px; color:var(--brand-muted); line-height:1.6;">
+        <b>FORZA Taller Móvil</b> · v2.0<br>
+        Datos guardados localmente (IndexedDB).<br>
+        Funciona sin internet. Fotos comprimidas automáticamente.
       </p>
     </div>
   </section>
@@ -892,15 +613,15 @@ textarea{font-family:var(--font-sans);}
 <!-- ================= BOTTOM NAV ================= -->
 <nav class="bottom">
   <button data-view="inicio" class="active"><span>🏠</span>Inicio</button>
-  <button data-view="proyectos"><span>📁</span>Obras</button>
-  <button data-view="camara"><span>📷</span>Foto</button>
+  <button data-view="proyectos"><span>📁</span>Proyectos</button>
+  <button data-view="camara"><span>📷</span>Cámara</button>
   <button data-view="galeria"><span>🖼️</span>Galería</button>
-  <button data-view="menu"><span>⚙️</span>Ajustes</button>
+  <button data-view="menu"><span>⚙️</span>Más</button>
 </nav>
 
 <!-- ================= MODAL ================= -->
 <div class="modal-bg" id="modalBg" onclick="if(event.target===this)cerrarModal()">
-  <div class="modal" id="modalContent"></div>
+  <div class="modal" id="modalContent" style="position:relative;"></div>
 </div>
 
 <!-- ================= TOAST ================= -->
@@ -920,17 +641,15 @@ const $$ = s => document.querySelectorAll(s);
 function toast(msg, tipo="ok"){
   const t=$('#toast');
   t.textContent=msg;
-  const colors = {
-    ok:"var(--ok)", warn:"var(--warn)", err:"var(--err)", info:"var(--blue)"
-  };
-  t.style.background = colors[tipo] || colors.ok;
+  t.style.background = tipo==="err" ? "var(--err)" : tipo==="warn" ? "var(--warn)" : "var(--ok)";
+  t.style.color = tipo==="warn" ? "#001" : tipo==="err" ? "#fff" : "#001";
   t.classList.add('show');
   clearTimeout(t._t);
   t._t=setTimeout(()=>t.classList.remove('show'),2200);
 }
 
 /* =========================================================
-   BASE DE DATOS FORZA
+   BASE DE DATOS FORZA — Perfiles y configuraciones
    ========================================================= */
 const DB = {
   perfiles: {
@@ -972,7 +691,7 @@ const DB = {
         herraje:[["ES500",4],["BI2501STC",2],["PU2500",2]]}
     },
     "4100":{
-      "4100-B-2H-MOSQ":{nom:"Ventana 2H + mosquitero",
+      "4100-B-2H-MOSQ":{nom:"Ventana 2H + mosquitero", mosq:true,
         cortes:[["12550","45°",2,"H"],["12550","45°",2,"W"],["298","45°",4,"H-60"],
                 ["298","45°",4,"(W+8)/2"],["199","45°",2,"H-60"],["199","45°",2,"(W+8)/2"],
                 ["276","90°",2,"H-64"]],
@@ -982,13 +701,13 @@ const DB = {
         cortes:[["12550","45°",2,"H"],["12550","45°",2,"W"],["298","45°",6,"H-60"],
                 ["298","45°",6,"(W+80)/3"],["276","90°",4,"H-64"]],
         herraje:[["CA4101P",6],["ES500",20],["K4100",3],["F304",2],["F308",2]]},
-      "4100-B-4H-CENTRO":{nom:"Ventana 4H cierre centro",
+      "4100-B-4H-CENTRO":{nom:"Ventana 4H cierre centro", mosq:true,
         cortes:[["12550","45°",2,"H"],["12550","45°",2,"W"],["298","45°",8,"H-60"],
                 ["298","45°",8,"(W+72)/4"],["199","45°",4,"H-60"],["199","45°",4,"(W+72)/4"],
                 ["276","90°",6,"H-64"],["292","90°",2,"H-78"]],
         herraje:[["CA4101P",8],["CA4100PM",4],["ES500",32],["K4100",4],["F304",2],
                  ["F307",2],["F308",1]]},
-      "4100-A-2H-MOSQ":{nom:"Ventana 2H altas + mosq",
+      "4100-A-2H-MOSQ":{nom:"Ventana 2H altas + mosq", mosq:true,
         cortes:[["12550","45°",2,"H"],["12550","45°",2,"W"],["319","45°",4,"H-60"],
                 ["319","45°",4,"(W+29)/2"],["317","45°",2,"H-60"],["317","45°",2,"(W+29)/2"],
                 ["344","90°",2,"H-64"]],
@@ -996,7 +715,7 @@ const DB = {
                  ["F307",2],["F308",2]]}
     },
     "5100":{
-      "5100-2H-MOSQ":{nom:"Ventana 2H + mosquitero",
+      "5100-2H-MOSQ":{nom:"Ventana 2H + mosquitero", mosq:true,
         cortes:[["1546","45°",2,"H"],["1546","45°",2,"W"],["548","45°",2,"H"],
                 ["548","45°",2,"W"],["56","45°",4,"H-50"],["56","45°",4,"(W+34)/2"],
                 ["59","45°",2,"H-50"],["59","45°",2,"(W+34)/2"],["44","90°",2,"H-54"]],
@@ -1007,7 +726,7 @@ const DB = {
                 ["548","45°",2,"W"],["56","45°",6,"H-50"],["56","45°",6,"(W+116)/3"],
                 ["44","90°",4,"H-54"]],
         herraje:[["CA5101M",6],["ES504",12],["ES502",12],["K5100",3],["F304",2],["F309",2]]},
-      "5100-4H-CENTRO":{nom:"Ventana 4H cierre centro",
+      "5100-4H-CENTRO":{nom:"Ventana 4H cierre centro", mosq:true,
         cortes:[["1546","45°",2,"H"],["1546","45°",2,"W"],["548","45°",2,"H"],
                 ["548","45°",2,"W"],["56","45°",8,"H-50"],["56","45°",8,"(W+120)/4"],
                 ["59","45°",4,"H-50"],["59","45°",4,"(W+120)/4"],["44","90°",4,"H-54"],
@@ -1019,7 +738,7 @@ const DB = {
 };
 
 /* =========================================================
-   PRECIOS INICIALES
+   PRECIOS INICIALES (del documento de rangos)
    ========================================================= */
 const INITIAL_PRICES = {
   moneda:"MXN", proveedor:"ALUGAMA / Fapim / STAC",
@@ -1084,9 +803,9 @@ const INITIAL_PRICES = {
   calibracion:{
     estado:"pendiente",
     pasos:[
-      {id:"herrajes", desc:"Cotización de 8 códigos Pareto", hecho:false},
+      {id:"herrajes", desc:"Cotización de 8 códigos Pareto a proveedor", hecho:false},
       {id:"vidrio", desc:"2 vidrierías cotizan m² + pulido", hecho:false},
-      {id:"deduccion", desc:"Armar 1 ventana por tipología", hecho:false},
+      {id:"deduccion", desc:"Armar 1 ventana por tipología y medir vidrio real", hecho:false},
       {id:"empaques", desc:"Pesar/medir rollo nuevo real", hecho:false}
     ]
   }
@@ -1094,19 +813,20 @@ const INITIAL_PRICES = {
 
 const INITIAL_MARCA = {
   nombre:"FORZA Taller",
-  subtitulo:"Cuaderno técnico",
+  subtitulo:"Utilidad de taller",
   logoDataUrl:null,
-  colorPrimary:"#1e5fa8",
-  colorBg:"#fafaf6",
-  colorPanel:"#ffffff",
-  colorPanel2:"#e8ecef"
+  colorPrimary:"#38bdf8",
+  colorBg:"#0f172a",
+  colorPanel:"#1e293b",
+  colorPanel2:"#334155"
 };
 
 /* =========================================================
-   INDEXEDDB
+   PERSISTENCIA (IndexedDB)
    ========================================================= */
 const DB_NAME="forza_taller";
 const DB_VER=2;
+let db;
 
 function abrirDB(){
   return new Promise((res,rej)=>{
@@ -1120,7 +840,7 @@ function abrirDB(){
       if(!d.objectStoreNames.contains('config'))
         d.createObjectStore('config',{keyPath:'k'});
     };
-    req.onsuccess=e=>res(e.target.result);
+    req.onsuccess=e=>{db=e.target.result; res(db);};
     req.onerror=rej;
   });
 }
@@ -1160,7 +880,7 @@ async function idbDel(store,key){
 }
 
 /* =========================================================
-   ESTADO
+   ESTADO GLOBAL (equivalente a AppContext)
    ========================================================= */
 const AppState = {
   precios: INITIAL_PRICES,
@@ -1172,21 +892,18 @@ const AppState = {
 };
 
 /* =========================================================
-   APLICAR MARCA
+   APLICAR MARCA (logo + colores + nombre)
    ========================================================= */
 function aplicarMarca(){
   const m = AppState.marca;
   const root = document.documentElement;
-  root.style.setProperty('--blue', m.colorPrimary);
-  root.style.setProperty('--blue-dark', shadeColor(m.colorPrimary,-15));
-  root.style.setProperty('--blue-light', shadeColor(m.colorPrimary,75));
-  root.style.setProperty('--paper', m.colorBg);
-  root.style.setProperty('--paper-card', m.colorPanel);
-  root.style.setProperty('--paper-grid', m.colorPanel2);
+  root.style.setProperty('--brand-primary', m.colorPrimary);
+  root.style.setProperty('--brand-bg', m.colorBg);
+  root.style.setProperty('--brand-panel', m.colorPanel);
+  root.style.setProperty('--brand-panel2', m.colorPanel2);
 
-  $('#hTitle').textContent = (m.nombre || "FORZA Taller").toUpperCase();
-  const sub = (m.subtitulo||'Cuaderno técnico').toUpperCase();
-  $('#hSubtitle').innerHTML = `${sub} · <span id="horaActual">--:--:--</span>`;
+  $('#hSubtitle').textContent = m.subtitulo || "Utilidad de taller";
+  $('#hTitle').textContent = m.nombre || "FORZA Taller";
 
   const logoBox = $('#headerLogo');
   if(m.logoDataUrl){
@@ -1195,8 +912,10 @@ function aplicarMarca(){
     const inicial = (m.nombre||"F").trim().charAt(0).toUpperCase();
     logoBox.innerHTML = `<span class="fallback">${inicial}</span>`;
   }
+
   document.title = m.nombre || "FORZA Taller";
 
+  // Actualizar inputs del menú
   $('#cfgNombre').value = m.nombre;
   $('#cfgSubtitulo').value = m.subtitulo;
   $('#cfgColorPrimary').value = m.colorPrimary;
@@ -1204,41 +923,35 @@ function aplicarMarca(){
   $('#cfgColorPanel').value = m.colorPanel;
   $('#cfgColorPanel2').value = m.colorPanel2;
 
+  // Preview logo en menú
   const prev = $('#logoPreview');
   if(m.logoDataUrl){
     prev.innerHTML = `<img src="${m.logoDataUrl}" alt="logo">`;
   } else {
-    prev.innerHTML = `<span style="font-size:26px; color:var(--ink-muted);">🖼️</span>`;
+    prev.innerHTML = `<span style="font-size:26px; color:var(--brand-muted);">🖼️</span>`;
   }
-}
-
-function shadeColor(hex, percent){
-  const n = parseInt(hex.replace('#',''),16);
-  let r = (n>>16) & 0xff;
-  let g = (n>>8) & 0xff;
-  let b = n & 0xff;
-  if(percent > 0){
-    r = Math.round(r + (255-r)*(percent/100));
-    g = Math.round(g + (255-g)*(percent/100));
-    b = Math.round(b + (255-b)*(percent/100));
-  } else {
-    r = Math.round(r * (1+percent/100));
-    g = Math.round(g * (1+percent/100));
-    b = Math.round(b * (1+percent/100));
-  }
-  return '#' + [r,g,b].map(x=>x.toString(16).padStart(2,'0')).join('');
 }
 
 /* =========================================================
    CARGA INICIAL
    ========================================================= */
 async function cargarEstado(){
+  // Marca
   const m = await idbGet('config','marca');
-  if(m) AppState.marca = {...INITIAL_MARCA, ...m};
+  if(m) AppState.marca = {...INITIAL_MARCA, ...m.marca || m};
+  if(m?.logoDataUrl) AppState.marca.logoDataUrl = m.logoDataUrl;
+  if(m?.nombre) AppState.marca.nombre = m.nombre;
+  if(m?.subtitulo) AppState.marca.subtitulo = m.subtitulo;
+  if(m?.colorPrimary) AppState.marca.colorPrimary = m.colorPrimary;
+  if(m?.colorBg) AppState.marca.colorBg = m.colorBg;
+  if(m?.colorPanel) AppState.marca.colorPanel = m.colorPanel;
+  if(m?.colorPanel2) AppState.marca.colorPanel2 = m.colorPanel2;
 
+  // Precios
   const p = await idbGet('config','precios');
   if(p) AppState.precios = {...INITIAL_PRICES, ...p};
 
+  // Config
   const c = await idbGet('config','cfg');
   if(c) AppState.cfg = {...AppState.cfg, ...c};
 
@@ -1250,7 +963,7 @@ async function cargarEstado(){
 async function guardarMarca(){
   AppState.marca = {
     nombre: $('#cfgNombre').value.trim() || "FORZA Taller",
-    subtitulo: $('#cfgSubtitulo').value.trim() || "Cuaderno técnico",
+    subtitulo: $('#cfgSubtitulo').value.trim() || "Utilidad de taller",
     logoDataUrl: AppState.marca.logoDataUrl,
     colorPrimary: $('#cfgColorPrimary').value,
     colorBg: $('#cfgColorBg').value,
@@ -1323,21 +1036,22 @@ function cargarPreciosUI(){
   const cont = $('#prMultiplos');
   cont.innerHTML = Object.entries(p.mult_acabado_vs_BO).map(([k,v])=>`
     <div style="display:flex; align-items:center; gap:10px; margin:8px 0;">
-      <span style="flex:1; font-size:11px; font-family:var(--font-mono); text-transform:uppercase;">${k.replace(/_/g,' ')}</span>
+      <span style="flex:1; font-size:13px; text-transform:capitalize;">${k.replace(/_/g,' ')}</span>
       <input type="number" step="0.01" value="${v}" style="width:90px; padding:8px;"
              onchange="actualizarMult('${k}', this.value)">
     </div>
   `).join('');
 
+  // Calibración
   const c = p.calibracion;
-  $('#calEstado').textContent = c.estado === "completa" ? "✓ COMPLETA" : `${c.pasos.filter(x=>x.hecho).length}/${c.pasos.length} COMPLETADOS`;
+  $('#calEstado').textContent = c.estado === "completa" ? "✅ Completa" : "⏳ " + c.pasos.filter(x=>x.hecho).length + "/" + c.pasos.length;
   $('#calLista').innerHTML = c.pasos.map(paso=>`
     <div class="check-item">
       <input type="checkbox" ${paso.hecho?'checked':''}
              onchange="toggleCalibracion('${paso.id}')">
       <div class="txt">
         <b>${paso.desc}</b>
-        <small>${paso.hecho?'✓ VERIFICADO':'⏳ PENDIENTE'}</small>
+        <small>${paso.hecho?'✅ Verificado':'⏳ Pendiente'}</small>
       </div>
     </div>
   `).join('');
@@ -1370,7 +1084,7 @@ async function toggleCalibracion(id){
   AppState.precios.calibracion.estado = todos ? "completa" : "pendiente";
   await idbPut('config',{k:'precios', ...AppState.precios});
   cargarPreciosUI();
-  toast(p.hecho ? "✓ Paso completado" : "Marcado como pendiente");
+  toast(p.hecho ? "✅ Paso completado" : "Marcado como pendiente");
 }
 
 function verTablaPerfiles(){
@@ -1388,15 +1102,15 @@ function verTablaPerfiles(){
   }).join('');
 
   abrirModal(`
-    <h3>▸ TABLA DE PERFILES</h3>
-    <p style="font-size:10px; color:var(--ink-muted); font-family:var(--font-mono); text-transform:uppercase; letter-spacing:1px;">
-      BARRA ${AppState.precios.longitud_barra_m} M · BO $${AppState.precios.precio_kg_por_acabado.BO}/KG · MERMA ${AppState.precios.merma_default_pct}%
+    <h3>📊 Tabla de perfiles</h3>
+    <p style="font-size:12px; color:var(--brand-muted);">
+      Barra ${AppState.precios.longitud_barra_m} m · BO $${AppState.precios.precio_kg_por_acabado.BO}/kg · Merma ${AppState.precios.merma_default_pct}%
     </p>
     <table style="margin-top:12px;">
-      <thead><tr><th>CÓDIGO</th><th>PERFIL</th><th>KG/M</th><th style="text-align:right;">$/BARRA</th></tr></thead>
+      <thead><tr><th>Código</th><th>Perfil</th><th>kg/m</th><th style="text-align:right;">$/barra</th></tr></thead>
       <tbody>${filas}</tbody>
     </table>
-    <button class="btn ghost" style="margin-top:16px;" onclick="cerrarModal()">CERRAR</button>
+    <button class="btn ghost" style="margin-top:16px;" onclick="cerrarModal()">Cerrar</button>
   `);
 }
 
@@ -1413,17 +1127,20 @@ function verTablaHerrajes(){
         <td>${info.nom}</td>
         <td style="text-align:right;">$${mn}-${mx}</td>
         <td style="text-align:right;">$${pv.toFixed(0)}</td>
-        <td><span class="tag ${info.criticidad}">${info.criticidad.substring(0,3)}</span></td>
+        <td><span class="tag ${info.criticidad}">${info.criticidad}</span></td>
       </tr>`;
     }).join('');
 
   abrirModal(`
-    <h3>▸ TABLA DE HERRAJES</h3>
+    <h3>🔩 Tabla de herrajes</h3>
+    <p style="font-size:12px; color:var(--brand-muted);">
+      Rangos estimados ±25%, ordenados por impacto
+    </p>
     <table style="margin-top:12px;">
-      <thead><tr><th>CÓDIGO</th><th>PIEZA</th><th>COSTO</th><th>VENTA</th><th>PRIO</th></tr></thead>
+      <thead><tr><th>Código</th><th>Pieza</th><th>Costo</th><th>Venta</th><th>Prio</th></tr></thead>
       <tbody>${filas}</tbody>
     </table>
-    <button class="btn ghost" style="margin-top:16px;" onclick="cerrarModal()">CERRAR</button>
+    <button class="btn ghost" style="margin-top:16px;" onclick="cerrarModal()">Cerrar</button>
   `);
 }
 
@@ -1452,14 +1169,16 @@ function verTablaVidrio(){
   `).join('');
 
   abrirModal(`
-    <h3>▸ TABLA DE VIDRIO</h3>
+    <h3>🪟 Tabla de vidrio</h3>
     <table style="margin-top:12px;">
-      <thead><tr><th>ESPECIFICACIÓN</th><th style="text-align:right;">PRECIO/M²</th></tr></thead>
+      <thead><tr><th>Especificación</th><th style="text-align:right;">Precio/m²</th></tr></thead>
       <tbody>${filas}</tbody>
     </table>
-    <h4>SERVICIOS</h4>
-    <table><tbody>${serv}</tbody></table>
-    <button class="btn ghost" style="margin-top:16px;" onclick="cerrarModal()">CERRAR</button>
+    <h4 style="margin-top:16px;">Servicios</h4>
+    <table>
+      <tbody>${serv}</tbody>
+    </table>
+    <button class="btn ghost" style="margin-top:16px;" onclick="cerrarModal()">Cerrar</button>
   `);
 }
 
@@ -1519,6 +1238,7 @@ function normAcabado(a){
 
 function precioBarraPerfil(cod, acabado){
   const ac = normAcabado(acabado);
+  const mult = AppState.precios.mult_acabado_vs_BO[ac] || 1;
   const kgm = AppState.precios.kg_m_por_perfil[cod] || DB.perfiles[cod]?.p || 0.6;
   const precioKg = AppState.precios.precio_kg_por_acabado[ac] ||
                    AppState.precios.precio_kg_por_acabado.BO;
@@ -1538,6 +1258,8 @@ function precioHerraje(cod){
   return {
     costo,
     venta: costo * (1 + (h.margen||40)/100),
+    banda_min: mn*(1+(h.margen||40)/100),
+    banda_max: mx*(1+(h.margen||40)/100),
     fuente:"rango_referencia"
   };
 }
@@ -1631,12 +1353,10 @@ function irA(view){
   window.scrollTo(0,0);
 
   const titulos = {
-    inicio:"Cuaderno técnico", proyectos:"OBRAS",
-    proyecto:"DETALLE PROYECTO", camara:"CÁMARA",
-    galeria:"GALERÍA", precios:"LISTA DE PRECIOS", menu:"AJUSTES"
+    inicio:"Inicio", proyectos:"Proyectos", proyecto:"Detalle proyecto",
+    camara:"Cámara", galeria:"Galería", precios:"Lista de precios", menu:"Menú"
   };
-  const sub = (titulos[view]||'Cuaderno técnico').toUpperCase();
-  $('#hSubtitle').innerHTML = `${sub} · <span id="horaActual">--:--:--</span>`;
+  $('#hSubtitle').textContent = titulos[view] || "Utilidad de taller";
 
   if(view==="proyectos") renderProyectos();
   if(view==="galeria") renderGaleria();
@@ -1648,24 +1368,6 @@ function irA(view){
 $$('nav.bottom button').forEach(b=>{
   b.onclick = () => irA(b.dataset.view);
 });
-
-function tickClock(){
-  const el = document.getElementById('horaActual');
-  if(el){
-    const now = new Date();
-    const hh = String(now.getHours()).padStart(2,'0');
-    const mm = String(now.getMinutes()).padStart(2,'0');
-    const ss = String(now.getSeconds()).padStart(2,'0');
-    el.textContent = `${hh}:${mm}:${ss}`;
-  }
-  const f = document.getElementById('stampFecha');
-  if(f){
-    const now = new Date();
-    f.textContent = `${String(now.getDate()).padStart(2,'0')}.${String(now.getMonth()+1).padStart(2,'0')}.${now.getFullYear()}`;
-  }
-}
-setInterval(tickClock, 1000);
-tickClock();
 
 /* =========================================================
    INICIO
@@ -1686,7 +1388,7 @@ async function renderInicio(){
   const recientes = proys.slice(-3).reverse();
   const cont = $('#iniRecientes');
   if(recientes.length===0){
-    cont.innerHTML = `<div class="empty"><div class="icon">📭</div><p>SIN OBRAS AÚN</p></div>`;
+    cont.innerHTML = `<div class="empty"><div class="icon">📭</div><p>Sin proyectos aún</p></div>`;
     return;
   }
   cont.innerHTML = recientes.map(p=>{
@@ -1697,7 +1399,7 @@ async function renderInicio(){
       <div class="thumb">🏗️</div>
       <div class="info">
         <b>${p.cliente || 'Sin nombre'}</b>
-        <small>${p.folio||'—'} · ${vanos} VANOS · $${total.toFixed(0)}</small>
+        <small>${p.folio||'—'} · ${vanos} vanos · $${total.toFixed(0)}</small>
       </div>
       <span class="tag ${cls}">${p.estado||'Cotizado'}</span>
     </div>`;
@@ -1718,7 +1420,7 @@ async function renderProyectos(){
 
   const cont = $('#listaProyectos');
   if(lista.length===0){
-    cont.innerHTML = `<div class="empty"><div class="icon">📭</div><p>SIN PROYECTOS</p></div>`;
+    cont.innerHTML = `<div class="empty"><div class="icon">📭</div><p>No hay proyectos</p></div>`;
     return;
   }
   cont.innerHTML = lista.map(p=>{
@@ -1729,7 +1431,7 @@ async function renderProyectos(){
       <div class="thumb">🏗️</div>
       <div class="info">
         <b>${p.cliente||'Sin nombre'}</b>
-        <small>${p.folio||'—'} · ${vanos} VANOS · $${total.toFixed(0)}</small>
+        <small>${p.folio||'—'} · ${vanos} vanos · $${total.toFixed(0)}</small>
       </div>
       <span class="tag ${cls}">${p.estado||'Cotizado'}</span>
     </div>`;
@@ -1754,7 +1456,7 @@ async function abrirProyecto(id){
   AppState.proyectoActual = p;
 
   $('#pryHeaderCard').innerHTML = `
-    <h2>// ${p.folio}</h2>
+    <h2>📋 ${p.folio}</h2>
     <label>Cliente</label>
     <input id="pryCli" value="${p.cliente||''}" onchange="guardarPry()">
     <label>Obra</label>
@@ -1769,9 +1471,9 @@ async function abrirProyecto(id){
     <label>Notas</label>
     <textarea id="pryNotasIn" rows="2" onchange="guardarPry()">${p.notas||''}</textarea>
     <div style="display:flex; gap:8px; margin-top:12px;">
-      <button class="btn ghost sm" style="flex:1;" onclick="document.getElementById('fileFoto').click()">📷 FOTO</button>
+      <button class="btn ghost sm" style="flex:1;" onclick="document.getElementById('fileFoto').click()">📷 Foto</button>
       <button class="btn ghost sm" style="flex:1;" onclick="window.print()">🖨️ PDF</button>
-      <button class="btn danger sm" onclick="eliminarProyecto()">✕</button>
+      <button class="btn danger sm" onclick="eliminarProyecto()">🗑️</button>
     </div>
   `;
 
@@ -1866,7 +1568,7 @@ function renderVanos(){
   const cont = $('#listaVanos');
 
   if(!p.vanos || p.vanos.length===0){
-    cont.innerHTML = `<div class="empty"><div class="icon">📐</div><p>SIN VANOS</p></div>`;
+    cont.innerHTML = `<div class="empty"><div class="icon">📐</div><p>Sin vanos. Agrega el primero arriba.</p></div>`;
     $('#pryTotales').innerHTML = '';
     return;
   }
@@ -1876,8 +1578,8 @@ function renderVanos(){
       <div class="thumb">🪟</div>
       <div class="info">
         <b>${v.ubic || v.confNom}</b>
-        <small>${v.serie} · ${v.H}×${v.W} · ${v.qty} PZA · ${v.acabado}</small>
-        <small style="color:var(--blue); font-weight:700;">$${v.importe.toFixed(2)}</small>
+        <small>${v.serie} · ${v.H}×${v.W} mm · ${v.qty} pza · ${v.acabado}</small>
+        <small style="color:var(--brand-primary); font-weight:700;">$${v.importe.toFixed(2)}</small>
       </div>
       <div class="actions">
         <button onclick="event.stopPropagation(); verDespiece(${i})">🔧</button>
@@ -1893,10 +1595,10 @@ function renderVanos(){
   const total = base + ivaM;
 
   $('#pryTotales').innerHTML = `
-    <div style="font-family:var(--font-mono); font-size:12px;">SUBTOTAL: <b>$${subtotal.toFixed(2)}</b></div>
-    ${AppState.cfg.descuento>0?`<div style="font-family:var(--font-mono); font-size:12px;">DESC ${AppState.cfg.descuento}%: <b>-$${descM.toFixed(2)}</b></div>`:''}
-    ${AppState.cfg.iva>0?`<div style="font-family:var(--font-mono); font-size:12px;">IVA ${AppState.cfg.iva}%: <b>$${ivaM.toFixed(2)}</b></div>`:''}
-    <div style="font-size:22px; color:var(--blue); margin-top:8px; font-family:var(--font-mono);">
+    <div>Subtotal: <b>$${subtotal.toFixed(2)}</b></div>
+    ${AppState.cfg.descuento>0?`<div>Descuento ${AppState.cfg.descuento}%: <b>-$${descM.toFixed(2)}</b></div>`:''}
+    ${AppState.cfg.iva>0?`<div>IVA ${AppState.cfg.iva}%: <b>$${ivaM.toFixed(2)}</b></div>`:''}
+    <div style="font-size:22px; color:var(--brand-primary); margin-top:8px;">
       TOTAL: <b>$${total.toFixed(2)}</b>
     </div>
   `;
@@ -1912,58 +1614,58 @@ function verDespiece(idx){
   const v = AppState.proyectoActual.vanos[idx];
   const perfiles = v.perfiles.map(p=>`
     <tr>
-      <td><b>${p.cod}</b><br><small style="opacity:.7;">${p.nom}</small></td>
+      <td><b>${p.cod}</b><br><small>${p.nom}</small></td>
       <td style="text-align:center;">${p.ang}</td>
       <td style="text-align:center;">${p.cant}</td>
-      <td style="text-align:right;">${p.L}</td>
+      <td style="text-align:right;">${p.L} mm</td>
       <td style="text-align:right;">$${p.subtotal.toFixed(2)}</td>
     </tr>`).join('');
   const herrajes = v.herrajes.map(h=>`
     <tr>
-      <td><b>${h.cod}</b><br><small style="opacity:.7;">${h.nom}</small></td>
+      <td><b>${h.cod}</b><br><small>${h.nom}</small></td>
       <td style="text-align:center;">${h.cant}</td>
       <td style="text-align:right;">$${h.importe.toFixed(2)}</td>
     </tr>`).join('');
 
   abrirModal(`
-    <h3>▸ DESPIECE — ${v.confNom}</h3>
-    <p style="font-size:10px; color:var(--ink-muted); font-family:var(--font-mono); text-transform:uppercase; letter-spacing:1px;">
-      ${v.H} × ${v.W} MM · ${v.qty} PZA · ZONA ${v.zona} · ${v.acabado.toUpperCase()}
+    <h3>🔧 Despiece — ${v.confNom}</h3>
+    <p style="font-size:12px; color:var(--brand-muted); margin-bottom:14px;">
+      ${v.H} × ${v.W} mm · ${v.qty} pza · Zona ${v.zona} · ${v.acabado}
     </p>
 
     <h4>PERFILES</h4>
     <table>
       <thead><tr>
-        <th>PERFIL</th><th>CORTE</th><th>CANT</th>
-        <th style="text-align:right;">LARGO</th>
-        <th style="text-align:right;">SUBTOTAL</th>
+        <th>Perfil</th><th>Corte</th><th>Cant</th>
+        <th style="text-align:right;">Largo</th>
+        <th style="text-align:right;">Subtotal</th>
       </tr></thead>
       <tbody>${perfiles}</tbody>
     </table>
 
     <h4>HERRAJES</h4>
     <table>
-      <thead><tr><th>PIEZA</th><th>CANT</th><th style="text-align:right;">IMPORTE</th></tr></thead>
+      <thead><tr><th>Pieza</th><th>Cant</th><th style="text-align:right;">Importe</th></tr></thead>
       <tbody>${herrajes}</tbody>
     </table>
 
     <h4>VIDRIO</h4>
-    <p style="font-size:12px; font-family:var(--font-mono);">
-      ${v.numHojas} HOJA(S) · ${v.vidrioM2.toFixed(3)} M² · ${v.vidrioKg.toFixed(1)} KG · $${v.costoVidrio.toFixed(2)}
+    <p style="font-size:13px;">
+      ${v.numHojas} hoja(s) · ${v.vidrioM2.toFixed(3)} m² · ${v.vidrioKg.toFixed(1)} kg · $${v.costoVidrio.toFixed(2)}
     </p>
 
     <h4>RESUMEN</h4>
-    <p style="font-size:12px; line-height:1.8; font-family:var(--font-mono);">
-      PERFILES: <b>$${v.costoPerfiles.toFixed(2)}</b><br>
-      HERRAJES: <b>$${v.costoHerrajes.toFixed(2)}</b><br>
-      VIDRIO: <b>$${v.costoVidrio.toFixed(2)}</b><br>
-      ──────────────────<br>
-      MATERIAL: <b>$${v.material.toFixed(2)}</b><br>
-      P.U. MARGEN: <b style="color:var(--blue);">$${v.pu.toFixed(2)}</b><br>
-      TOTAL ${v.qty} PZA: <b style="font-size:15px; color:var(--blue);">$${v.importe.toFixed(2)}</b>
+    <p style="font-size:13px; line-height:1.8;">
+      Perfiles: <b>$${v.costoPerfiles.toFixed(2)}</b><br>
+      Herrajes: <b>$${v.costoHerrajes.toFixed(2)}</b><br>
+      Vidrio: <b>$${v.costoVidrio.toFixed(2)}</b><br>
+      <hr style="margin:8px 0; border-color:var(--brand-line);">
+      Material: <b>$${v.material.toFixed(2)}</b><br>
+      P.U. con margen: <b style="color:var(--brand-primary);">$${v.pu.toFixed(2)}</b><br>
+      Total ${v.qty} pza: <b style="font-size:16px; color:var(--brand-primary);">$${v.importe.toFixed(2)}</b>
     </p>
 
-    <button class="btn ghost" style="margin-top:16px;" onclick="cerrarModal()">CERRAR</button>
+    <button class="btn ghost" style="margin-top:16px;" onclick="cerrarModal()">Cerrar</button>
   `);
 }
 
@@ -2078,12 +1780,12 @@ function pedirGPS(){
         acc:Math.round(pos.coords.accuracy)+" m"
       };
       $('#gpsInfo').className = "alert ok";
-      $('#gpsInfo').innerHTML = `✓ Ubicación capturada<br>
+      $('#gpsInfo').innerHTML = `✅ Ubicación capturada<br>
         <small>${AppState.gpsActual.lat}, ${AppState.gpsActual.lng} (±${AppState.gpsActual.acc})</small>`;
     },
     err=>{
       $('#gpsInfo').className = "alert warn";
-      $('#gpsInfo').textContent = "⚠ Sin GPS: " + err.message;
+      $('#gpsInfo').textContent = "⚠️ Sin GPS: " + err.message;
     },
     {enableHighAccuracy:true, timeout:10000}
   );
@@ -2109,7 +1811,7 @@ async function renderGaleria(){
   const grid = $('#galeriaGrid');
   if(lista.length===0){
     grid.innerHTML = `<div style="grid-column:1/-1;" class="empty">
-      <div class="icon">🖼️</div><p>SIN FOTOS</p></div>`;
+      <div class="icon">🖼️</div><p>Sin fotos aún</p></div>`;
     return;
   }
   grid.innerHTML = lista.map(f=>{
@@ -2125,15 +1827,15 @@ async function verFoto(id){
   const f = await idbGet('fotos',id);
   const p = await idbGet('proyectos',f.proyectoId);
   abrirModal(`
-    <img src="${f.dataUrl}" style="width:100%; max-height:60vh; object-fit:contain; border-radius:8px;">
+    <img src="${f.dataUrl}" style="width:100%; max-height:60vh; object-fit:contain; border-radius:12px;">
     <h3 style="margin-top:14px;">${f.descripcion||'Sin descripción'}</h3>
-    <p style="font-size:11px; color:var(--ink-muted); line-height:1.6; font-family:var(--font-mono);">
+    <p style="font-size:13px; color:var(--brand-muted); line-height:1.6;">
       ${p?.cliente||'?'} · ${p?.folio||'?'}<br>
-      TIPO: ${f.tipo.toUpperCase()} · ${new Date(f.timestamp).toLocaleString('es-MX')}
+      Tipo: ${f.tipo} · ${new Date(f.timestamp).toLocaleString('es-MX')}
       ${f.gps?`<br>📍 ${f.gps.lat}, ${f.gps.lng} (±${f.gps.acc})`:''}
     </p>
-    <button class="btn danger" style="margin-top:16px;" onclick="borrarFoto('${f.id}')">✕ ELIMINAR</button>
-    <button class="btn ghost" onclick="cerrarModal()">CERRAR</button>
+    <button class="btn danger" style="margin-top:16px;" onclick="borrarFoto('${f.id}')">🗑️ Eliminar</button>
+    <button class="btn ghost" onclick="cerrarModal()">Cerrar</button>
   `);
 }
 
@@ -2197,7 +1899,7 @@ async function procesarImport(e){
 }
 
 async function borrarTodo(){
-  if(!confirm("⚠ ESTO BORRA TODO. ¿Continuar?")) return;
+  if(!confirm("⚠️ ESTO BORRA TODO. ¿Continuar?")) return;
   if(!confirm("¿Estás completamente seguro?")) return;
   const d = await abrirDB();
   d.transaction('proyectos','readwrite').objectStore('proyectos').clear();
@@ -2215,6 +1917,7 @@ async function borrarTodo(){
   await renderInicio();
   pedirGPS();
 
+  // Prevenir zoom doble tap
   let lastTap=0;
   document.addEventListener('touchend',e=>{
     const now=Date.now();
@@ -2222,6 +1925,7 @@ async function borrarTodo(){
     lastTap=now;
   },{passive:false});
 })();
+
 </script>
 </body>
 </html>
